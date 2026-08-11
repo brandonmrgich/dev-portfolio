@@ -72,18 +72,6 @@
         "Fixed it by neutralizing that WinForms initialization with a six-instruction IL patch applied to the user's own installed copy, distributing only source and never any game code.",
         "Generalized the result beyond the single title: a scanner identifies at-risk assemblies by their Application.AddMessageFilter / EnableVisualStyles call sites, and a standalone FNA probe isolates a runtime fault from a game fault.",
         "Published the full root-cause trace so the method transfers to other affected games rather than ending as a one-title workaround."
-      ],
-      "upstream": [
-        {
-          "label": "FNA-XNA/FNA#671",
-          "title": "Dead keyboard when a game inits Mono WinForms in-process (SDL focus desync); window-creation crash on FNA 25.11+",
-          "url": "https://github.com/FNA-XNA/FNA/issues/671"
-        },
-        {
-          "label": "wine-mono/wine-mono#230",
-          "title": "In-process System.Windows.Forms desyncs SDL/FNA input focus (dead keyboard); FNA 25.x window-creation crash on 10.4+",
-          "url": "https://github.com/wine-mono/wine-mono/issues/230"
-        }
       ]
     },
     {

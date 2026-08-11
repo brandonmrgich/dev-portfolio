@@ -61,11 +61,6 @@ for (const p of projects.featured) {
 }
 push('')
 
-// No "Upstream issues filed" section. `upstream` entries stay in projects.json and
-// still render on dev.brandonmrgich.com, where they sit under the project that
-// explains them. On the profile README they landed as a flat list of bug-tracker
-// links with that context stripped, which reads as noise rather than as work.
-
 // --- public repos ---------------------------------------------------------
 if (projects.openSource.length) {
   push('### Public repositories', '')
