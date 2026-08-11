@@ -7,19 +7,19 @@
   "principles": [
     {
       "name": "Make state honest",
-      "body": "Most bugs are a type that disagrees with reality — wider than the real states, narrower than them, or holding two shapes for one truth. The fix belongs in the shape of the data, not in a comment warning about it or an adapter smoothing it over."
+      "body": "Can this type represent something that can never actually happen? Can it represent one fact two different ways? Most of the bugs I've chased started as a yes to one of those. A comment warning about the bad state doesn't remove it — it just documents that it's still reachable."
     },
     {
       "name": "Eliminate, don't paper over",
-      "body": "Contorted code is information. A step counter, a translation helper, a branch that defers the problem to a later layer — each is telling you the model is wrong. The test of a real fix is whether it lets you delete something."
+      "body": "If the fix doesn't let me delete something, I probably haven't found it yet."
     },
     {
       "name": "Test the claim, not the explanation",
-      "body": "A comment explaining why a check was removed is not evidence the check was unnecessary. Neither is a commit message, a ticket, or anyone's recollection — mine included. When a change rests on \"this can't happen,\" I go try to make it happen. On safety-critical software that habit is the job; everywhere else it is still cheaper than the incident."
+      "body": "A guard comes out, and a comment goes in explaining why that was safe. The comment isn't the evidence. Neither is the commit message, the ticket, or my own memory of writing it. When something rests on \"this can't happen,\" I go try to make it happen — on human-rated software that's simply the job, and everywhere else it's still cheaper than the incident."
     },
     {
       "name": "Go look at the machine",
-      "body": "The repository describes intent. The running system holds the truth, and the two drift without anything being committed to mark it. Before I say what a deployed system is doing, I go check the deployed system. Configuration drift between environments isn't an edge case — it's the default outcome of not looking."
+      "body": "Two environments running the same configuration, except one of them quietly isn't. Nothing gets committed when they diverge, so the repository keeps describing intent while the host holds the truth. I check the deployed system before I describe the deployed system."
     }
   ],
 
