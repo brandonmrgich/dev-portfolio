@@ -29,7 +29,9 @@ const personLd = {
   jobTitle: basics.label,
   description: basics.headline,
   url: canonical,
-  email: `mailto:${basics.email}`,
+  // No `email` field on purpose. The address stays in resume.json for JSON Resume
+  // compatibility, but publishing it in JSON-LD would hand it straight to scrapers —
+  // which is the same exposure that taking it out of the header was meant to avoid.
   address: {
     '@type': 'PostalAddress',
     addressLocality: basics.location.city,
@@ -79,10 +81,14 @@ const personLd = {
 
     <footer class="site-footer">
       <div class="wrap">
+        {/* Astro trims the whitespace between a text node and a following element,
+            so the spaces before each link are explicit. Removing them re-runs
+            "source onGitHub". */}
         <p class="mono">
-          Built with Astro · source on
-          <a href="https://github.com/brandonmrgich/dev-portfolio">GitHub</a> ·
-          music work at <a href="https://brandonmrgich.com">brandonmrgich.com</a>
+          Built with Astro · source on{' '}
+          <a href="https://github.com/brandonmrgich/dev-portfolio">GitHub</a> · music work
+          at{' '}
+          <a href="https://brandonmrgich.com">brandonmrgich.com</a>
         </p>
       </div>
     </footer>

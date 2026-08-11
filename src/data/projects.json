@@ -43,18 +43,6 @@
       ]
     },
     {
-      "name": "LabelPipeline",
-      "tagline": "Automation pipeline for music distribution, royalties, and cataloging.",
-      "visibility": "private",
-      "stack": ["TypeScript", "Turborepo", "Prisma", "Next.js", "Playwright", "Vitest"],
-      "scale": "3 apps (admin, api, worker) over 8 shared packages",
-      "highlights": [
-        "pnpm/Turborepo monorepo splitting admin, API, and background worker apps over shared packages for catalog, media, identifiers, validation, job orchestration, and release manifests.",
-        "Specifies a release-manifest format as the contract between catalog data and downstream distribution.",
-        "Covered by Playwright end-to-end and Vitest unit suites."
-      ]
-    },
-    {
       "name": "BrainBeatsV4",
       "tagline": "EEG-to-MIDI web application — record music with your brain.",
       "visibility": "public",
