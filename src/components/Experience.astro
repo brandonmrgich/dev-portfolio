@@ -53,13 +53,20 @@ import { range, dateAttr } from '../lib/format.js'
 </section>
 
 <style>
+  /* Spacing is positive-only and set between siblings rather than as a grid gap, so a
+     continuity row tucks under its predecessor without a negative offset tuned to the
+     current line-height — the old approach collapsed once an employer name wrapped. */
   .jobs {
-    display: grid;
-    gap: 2.5rem;
+    display: block;
   }
 
-  .job.compact {
-    margin-top: -1.9rem;
+  .job + .job {
+    margin-top: 2.5rem;
+  }
+
+  /* Only the continuity row itself tucks up. The job *after* one keeps full spacing. */
+  .job + .job.compact {
+    margin-top: 0.85rem;
   }
 
   .job-head {

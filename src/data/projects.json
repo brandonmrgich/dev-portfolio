@@ -34,22 +34,24 @@
     },
     {
       "name": "Ephemeral CI Runners",
-      "tagline": "Self-hosted ephemeral GitHub Actions runners — one disposable container per job.",
+      "tagline": "Self-hosted GitHub Actions runners — one disposable container per job.",
       "visibility": "private",
       "stack": ["Python", "Docker", "containerd", "systemd", "GitHub Apps"],
       "highlights": [
-        "Webhook-driven controller that launches a fresh container per CI job and tears it down on completion, so no build ever inherits a dirty workspace.",
-        "Runs the CI for the music platform monorepo on self-hosted hardware with a shared pnpm store bind-mounted across containers."
+        "Webhook-driven controller that launches one runner container per CI job and tears it down on completion, managed as systemd units with configurable per-repo concurrency.",
+        "Runs CI for the music platform monorepo on self-hosted hardware, with a shared pnpm store bind-mounted into every container to keep installs fast across otherwise disposable environments."
       ]
     },
     {
       "name": "LabelPipeline",
       "tagline": "Automation pipeline for music distribution, royalties, and cataloging.",
       "visibility": "private",
-      "stack": ["TypeScript", "Node.js"],
+      "stack": ["TypeScript", "Turborepo", "Prisma", "Next.js", "Playwright", "Vitest"],
+      "scale": "3 apps (admin, api, worker) over 8 shared packages",
       "highlights": [
-        "Automates the distribution and royalty accounting path between the catalog and downstream distributors.",
-        "Models royalty splits and rights ownership against industry metadata standards."
+        "pnpm/Turborepo monorepo splitting admin, API, and background worker apps over shared packages for catalog, media, identifiers, validation, job orchestration, and release manifests.",
+        "Specifies a release-manifest format as the contract between catalog data and downstream distribution.",
+        "Covered by Playwright end-to-end and Vitest unit suites."
       ]
     },
     {
@@ -73,15 +75,15 @@
     },
     {
       "repo": "brandonmrgich/dotfiles",
-      "blurb": "GNU Stow-managed shell, editor, and tooling config synchronized across a MacBook, a Debian agent host, and a Raspberry Pi."
+      "blurb": "GNU Stow-managed dotfiles — zsh, tmux, git, and starship config kept in one tracked tree."
     },
     {
       "repo": "brandonmrgich/nvim",
-      "blurb": "Neovim configuration — Lua, LSP-first, tuned for polyglot work across Java, TypeScript, and Python."
+      "blurb": "Neovim config built on lazy.nvim and Mason, with LSP servers and formatters wired up for Java, Python, Lua, and web files."
     },
     {
       "repo": "brandonmrgich/VST-prepper",
-      "blurb": "Python utility for batch-preparing VST plugin assets for a music production pipeline."
+      "blurb": "CLI that turns a raw piano sampling session into a usable instrument: detects transients, identifies the note, normalizes, and writes one file per key across an input tree. Built to cut 88 keys × 4 mic positions without doing it by hand."
     }
   ],
 

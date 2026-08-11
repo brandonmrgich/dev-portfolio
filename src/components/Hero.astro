@@ -3,14 +3,17 @@
 // label: Hero
 // role: Above-the-fold identity block — name, current role, headline, contact links.
 // invariants: Every value comes from resume.json basics; nothing is hardcoded here.
-//   The current role is derived from the first work entry with a null endDate, so it
-//   stays correct when the resume changes without editing this component.
+//   The current role is the most recently started entry with no endDate — picked by
+//   startDate rather than array position, so reordering or appending to resume.json
+//   cannot silently promote the wrong job into the hero.
 // last-touched: 2026-08-10
 // ---
 import resume from '../data/resume.json'
 
 const { basics } = resume
-const current = resume.work.find((w) => w.endDate === null)
+const current = resume.work
+  .filter((w) => !w.endDate)
+  .sort((a, b) => b.startDate.localeCompare(a.startDate))[0]
 ---
 
 <header class="hero">

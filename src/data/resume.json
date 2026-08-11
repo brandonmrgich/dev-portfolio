@@ -8,7 +8,8 @@
   "basics": {
     "name": "Brandon Mrgich",
     "label": "Software Engineer",
-    "headline": "Software engineer on human-rated launch control systems at NASA Kennedy Space Center, building GUI platforms, deployment automation, and the music infrastructure I run on the side.",
+    "headline": "Software engineer on human-rated launch control systems at NASA Kennedy Space Center — Java GUI platforms, deployment automation, and testing for safety-critical software. Off the clock, a production music catalog and streaming platform.",
+    "_headlineNote": "Written for this site, not lifted from the resume PDF, which has no summary section. Every clause is sourced from the resume's Experience and Projects sections. This string is the page's meta description, its Open Graph description, and its JSON-LD description — it is the most-quoted sentence on the site, so change it deliberately.",
     "email": "brandonamrgich@gmail.com",
     "location": {
       "city": "Jacksonville",
