@@ -45,7 +45,9 @@ push(
 
 if (current) {
   const at = current.client ? `${current.name} at ${current.client}` : current.name
-  push(`**${current.position}** · ${at}  `, `${basics.location.city}, ${basics.location.region}`, '')
+  // No trailing double-space: the hard line break existed to bind a location line
+  // underneath, and `basics.location` is gone (see `_locationNote` in resume.json).
+  push(`**${current.position}** · ${at}`, '')
 }
 
 push(basics.headline, '', `**Full portfolio → [dev.brandonmrgich.com](https://dev.brandonmrgich.com)**`, '')

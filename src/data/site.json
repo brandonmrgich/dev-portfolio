@@ -7,19 +7,27 @@
   "principles": [
     {
       "name": "Make state honest",
-      "body": "Can this type represent something that can never actually happen? Can it represent one fact two different ways? Most of the bugs I've chased started as a yes to one of those. A comment warning about the bad state doesn't remove it — it just documents that it's still reachable."
+      "body": "Can this type represent something that can never actually happen? Can it represent one fact two different ways? Most of the bugs I've chased started as a yes to one of those. A comment warning about the bad state doesn't remove it — it just documents that it's still reachable. Sometimes two representations genuinely have to coexist, like a DTO and the schema object behind it. That's a contract rather than a duplicate, and the whole difference is whether something enforces it; an agreement nobody checks is just drift with better paperwork."
     },
     {
       "name": "Eliminate, don't paper over",
-      "body": "If the fix doesn't let me delete something, I probably haven't found it yet."
+      "body": "Adapters, shims, a flag to defer the hard case — that friction is information about the shape, not something to wrap one more layer around. The useful question isn't how to make the awkward thing work. It's what shape makes the awkwardness disappear along with the code that grew around it. If a fix doesn't let me delete something, I probably haven't found it yet."
     },
     {
-      "name": "Test the claim, not the explanation",
-      "body": "A guard comes out, and a comment goes in explaining why that was safe. The comment isn't the evidence. Neither is the commit message, the ticket, or my own memory of writing it. When something rests on \"this can't happen,\" I go try to make it happen — on human-rated software that's simply the job, and everywhere else it's still cheaper than the incident."
+      "name": "Encapsulate to contain change",
+      "body": "I think in objects; that's how I break a problem down before I write anything. An interface should expose exactly what the outside needs and nothing more, because the day a library or an upstream dependency changes is the day you find out how much of your code was quietly holding onto its details. Encapsulation is what keeps that a local edit instead of a sweep."
     },
     {
-      "name": "Go look at the machine",
-      "body": "Two environments running the same configuration, except one of them quietly isn't. Nothing gets committed when they diverge, so the repository keeps describing intent while the host holds the truth. I check the deployed system before I describe the deployed system."
+      "name": "V1 is the smallest scope, not the roughest build",
+      "body": "An MVP limits how much I build, not how well. Scoping a feature includes the cost of giving it room to grow, so the first version doesn't have to be torn out to reach the second. The same instinct applies while I'm writing it: if a pattern is going to be needed again, by a teammate or anyone else, it gets commonized then — not in a cleanup pass that never comes."
+    },
+    {
+      "name": "Write for whoever maintains it next",
+      "body": "Maintenance cost is a design input, not a discovery. Code should say what it does on its own, and comments are for what it can't say. Docs are only as good as the code and issues they point at, so anchoring matters more than volume — an unanchored doc never announces that it has gone stale, it just stops being true. Structure and readability do more for the next person than any amount of prose."
+    },
+    {
+      "name": "Configuration where it earns its place",
+      "body": "Not everything should be configurable. Every knob is another behavior to reason about and another surface to trust. But where the value is high, I'd rather derive it at startup than bake it in: changing a config file costs far less than changing source, and far less again than everything a source change drags behind it."
     }
   ],
 

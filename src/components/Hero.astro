@@ -43,7 +43,6 @@ const hasAvatar = existsSync(join(process.cwd(), 'public/avatar.jpg'))
         )
       }
       <div>
-        <p class="mono kicker">{basics.location.city}, {basics.location.region}</p>
         <h1>{basics.name}</h1>
       </div>
     </div>
@@ -100,13 +99,6 @@ const hasAvatar = existsSync(join(process.cwd(), 'public/avatar.jpg'))
       width: 68px;
       height: 68px;
     }
-  }
-
-  .kicker {
-    margin: 0 0 0.4rem;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
   }
 
   h1 {
