@@ -49,6 +49,26 @@ pnpm preview
 Set `GITHUB_TOKEN` locally only if you hit the unauthenticated rate limit (60/hr per IP);
 a handful of repos will not.
 
+## GitHub profile README
+
+The same two data files also render the profile README at
+[github.com/brandonmrgich](https://github.com/brandonmrgich) — the one GitHub shows at
+the top of the profile page, which lives in the self-titled repo
+[`brandonmrgich/brandonmrgich`](https://github.com/brandonmrgich/brandonmrgich).
+
+```sh
+pnpm profile          # render -> dist/PROFILE.md (review it)
+pnpm profile:publish  # render, then push to the profile repo as README.md
+```
+
+Do not edit that repo's README by hand — the next publish reverts it. Edit
+`src/data/*.json` here, and the site and the profile move together.
+
+Publishing is a deliberate local step, not part of the deploy workflow. Pushing to a
+*different* repository requires a personal access token, and a portfolio site is not a
+good reason to keep one in CI. Re-running with no data change is a no-op, so it will not
+spam the profile repo with empty commits.
+
 ## Deploy
 
 Push to `main`. `.github/workflows/deploy.yml` builds and publishes to GitHub Pages.

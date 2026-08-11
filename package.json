@@ -9,7 +9,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "profile": "node scripts/build-profile.mjs",
+    "profile:publish": "node scripts/build-profile.mjs && bash scripts/publish-profile.sh"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
