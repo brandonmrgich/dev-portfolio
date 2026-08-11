@@ -1,0 +1,29 @@
+---
+// ---
+// label: index page
+// role: The whole site. One page, ordered so a recruiter's first screen answers
+//   "who is this and what do they do" before asking them to scroll.
+// invariants: Section order is Hero → Skills → Work → Repos → Experience → Credentials.
+//   Skills sits high on purpose: it is the section people scan for first.
+// last-touched: 2026-08-10
+// ---
+import Base from '../layouts/Base.astro'
+import Hero from '../components/Hero.astro'
+import Skills from '../components/Skills.astro'
+import Featured from '../components/Featured.astro'
+import Repos from '../components/Repos.astro'
+import Experience from '../components/Experience.astro'
+import Credentials from '../components/Credentials.astro'
+import resume from '../data/resume.json'
+
+const title = `${resume.basics.name} — ${resume.basics.label}`
+---
+
+<Base title={title} description={resume.basics.headline}>
+  <Hero />
+  <Skills />
+  <Featured />
+  <Repos />
+  <Experience />
+  <Credentials />
+</Base>

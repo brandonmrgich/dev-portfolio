@@ -1,0 +1,112 @@
+---
+// ---
+// label: Hero
+// role: Above-the-fold identity block — name, current role, headline, contact links.
+// invariants: Every value comes from resume.json basics; nothing is hardcoded here.
+//   The current role is derived from the first work entry with a null endDate, so it
+//   stays correct when the resume changes without editing this component.
+// last-touched: 2026-08-10
+// ---
+import resume from '../data/resume.json'
+
+const { basics } = resume
+const current = resume.work.find((w) => w.endDate === null)
+---
+
+<header class="hero">
+  <div class="wrap">
+    <p class="mono kicker">{basics.location.city}, {basics.location.region}</p>
+    <h1>{basics.name}</h1>
+
+    {
+      current && (
+        <p class="role">
+          {current.position} · <span>{current.name}</span>
+          {current.client && <span class="client"> at {current.client}</span>}
+        </p>
+      )
+    }
+
+    <p class="headline">{basics.headline}</p>
+
+    <ul class="links">
+      {
+        basics.profiles.map((p) => (
+          <li>
+            <a href={p.url} rel="me">
+              {p.network} <span class="handle">{p.username}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={`mailto:${basics.email}`}>
+          Email <span class="handle">{basics.email}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<style>
+  .hero {
+    padding: 4.5rem 0 3.25rem;
+  }
+
+  .kicker {
+    margin: 0 0 0.85rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 6vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.65rem;
+  }
+
+  .role {
+    font-size: 1.0625rem;
+    color: var(--text);
+    margin-bottom: 1.1rem;
+    max-width: var(--measure);
+  }
+
+  .role span {
+    color: var(--accent);
+  }
+
+  .role .client {
+    color: var(--text-muted);
+  }
+
+  .headline {
+    font-size: 1.0625rem;
+    color: var(--text-muted);
+    max-width: 60ch;
+    margin-bottom: 1.75rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .links a {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .links a:hover .handle {
+    color: var(--link);
+  }
+
+  .links .handle {
+    color: var(--text-faint);
+  }
+</style>

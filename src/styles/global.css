@@ -1,0 +1,218 @@
+/* ---
+   label: global stylesheet
+   role: Whole-site design tokens and base element styles. There is no CSS framework
+     here on purpose — the site is one page of semantic HTML and a framework would be
+     more bytes than the content.
+   invariants:
+     - Every color is a token. No raw hex outside :root / the dark-scheme block.
+     - Light and dark are both first-class; dark is the default only for users with no
+       stated preference.
+   gotchas: astro.config sets inlineStylesheets:'always', so this file ships inside the
+     HTML document — keep it small enough that inlining stays a win.
+   last-touched: 2026-08-10
+   --- */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #0d1117;
+  --bg-raised: #12181f;
+  --bg-inset: #0a0e13;
+  --border: #232b36;
+  --border-strong: #303a48;
+  --text: #e4e9f0;
+  --text-muted: #9aa7b8;
+  --text-faint: #6b7887;
+  --accent: #4fd1c5;
+  --accent-dim: #2b8b83;
+  --link: #7cc4ff;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --measure: 74ch;
+  --gap: 1rem;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fdfdfc;
+    --bg-raised: #ffffff;
+    --bg-inset: #f4f6f8;
+    --border: #e2e6ea;
+    --border-strong: #cfd6dd;
+    --text: #1a1f26;
+    --text-muted: #55606d;
+    --text-faint: #7a8797;
+    --accent: #0f8a80;
+    --accent-dim: #0f8a80;
+    --link: #0b62c4;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 40rem) {
+  .wrap {
+    padding: 0 1.125rem;
+  }
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  letter-spacing: -0.011em;
+  margin: 0;
+}
+
+p {
+  margin: 0 0 0.9rem;
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--link);
+  text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* --- section scaffolding ------------------------------------------------- */
+
+.section {
+  padding: 3.25rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.section-head h2 {
+  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.section-head .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-note {
+  font-size: 0.875rem;
+  color: var(--text-faint);
+  max-width: var(--measure);
+  margin-top: -0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+/* --- shared bits --------------------------------------------------------- */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: var(--bg-inset);
+  white-space: nowrap;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 1.15rem;
+  margin-bottom: 0.55rem;
+  color: var(--text-muted);
+  max-width: var(--measure);
+}
+
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.66em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+}
+
+.bullets li:last-child {
+  margin-bottom: 0;
+}

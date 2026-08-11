@@ -1,0 +1,119 @@
+---
+// ---
+// label: Base layout
+// role: Document shell — head metadata, JSON-LD Person, skip link, footer.
+// invariants:
+//   - Canonical URLs derive from Astro.site (astro.config.mjs), never a hardcoded host.
+//   - Zero client JS. If a component ever needs a client:* directive, that is a
+//     deliberate decision, not a default.
+// gotchas: `new URL(path, Astro.site)` requires the trailing-slash-safe path; passing
+//   an absolute '/foo' against a site with no base is correct here.
+// last-touched: 2026-08-10
+// ---
+import '../styles/global.css'
+import resume from '../data/resume.json'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+const { basics } = resume
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: basics.name,
+  jobTitle: basics.label,
+  description: basics.headline,
+  url: canonical,
+  email: `mailto:${basics.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: basics.location.city,
+    addressRegion: basics.location.region,
+    addressCountry: basics.location.countryCode,
+  },
+  sameAs: basics.profiles.map((p) => p.url),
+  knowsAbout: resume.skills.flatMap((s) => s.keywords),
+  alumniOf: resume.education.map((e) => ({
+    '@type': 'CollegeOrUniversity',
+    name: e.institution,
+  })),
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={basics.name} />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%8C%A8%3C/text%3E%3C/svg%3E"
+    />
+
+    <!-- Astro leaves non-JS script types untouched — this is emitted verbatim, not bundled. -->
+    <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="mono">
+          Built with Astro · source on
+          <a href="https://github.com/brandonmrgich/dev-portfolio">GitHub</a> ·
+          music work at <a href="https://brandonmrgich.com">brandonmrgich.com</a>
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--bg-raised);
+        color: var(--text);
+        padding: 0.6rem 1rem;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+        z-index: 10;
+      }
+
+      .skip:focus {
+        left: 1rem;
+        top: 1rem;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem 0 3rem;
+      }
+
+      .site-footer p {
+        margin: 0;
+        max-width: none;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+---
+// ---
+// label: Featured projects
+// role: The substantial work — most of it in private repos, described in prose.
+// invariants:
+//   - A `private` entry is NEVER rendered as a link and is never enriched from the
+//     GitHub API. It carries a visible "private source" marker so the absence of a
+//     link reads as a deliberate choice rather than an oversight.
+//   - `link` is optional and, when present, points at a public artifact (a live site
+//     or a public org), not at the private repo.
+// last-touched: 2026-08-10
+// ---
+import projects from '../data/projects.json'
+---
+
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Selected Work</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="section-note">
+      Most of this runs in private repositories. What follows is the shape of the work
+      rather than a link to the source.
+    </p>
+
+    <ol class="cards">
+      {
+        projects.featured.map((p) => (
+          <li class="card">
+            <div class="card-head">
+              <h3>
+                {p.link ? <a href={p.link.url}>{p.name}</a> : p.name}
+                {p.visibility === 'private' && <span class="private">private source</span>}
+              </h3>
+              <p class="tagline">{p.tagline}</p>
+              {p.scale && <p class="mono scale">{p.scale}</p>}
+              {p.context && <p class="mono scale">{p.context}</p>}
+            </div>
+
+            <ul class="bullets">
+              {p.highlights.map((h) => (
+                <li>{h}</li>
+              ))}
+            </ul>
+
+            <ul class="tag-list stack">
+              {p.stack.map((s) => (
+                <li class="tag">{s}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .cards {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+  }
+
+  .card-head {
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 1.125rem;
+    font-weight: 650;
+    margin-bottom: 0.35rem;
+  }
+
+  .private {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    border: 1px dashed var(--border-strong);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+  }
+
+  .tagline {
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .scale {
+    margin: 0;
+    color: var(--text-faint);
+  }
+
+  .stack {
+    margin-top: 1.1rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+</style>

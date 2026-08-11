@@ -1,0 +1,55 @@
+---
+// ---
+// label: Skills
+// role: Renders the resume's skills groups as labelled keyword lists.
+// invariants: Group order and membership come from resume.json — this component makes
+//   no editorial decisions. Changing what appears here means editing resume.json.
+// last-touched: 2026-08-10
+// ---
+import resume from '../data/resume.json'
+---
+
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Skills</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="groups">
+      {
+        resume.skills.map((group) => (
+          <div class="group">
+            <h3>{group.name}</h3>
+            <ul class="tag-list">
+              {group.keywords.map((k) => (
+                <li class="tag">{k}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .groups {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .groups {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem 2.5rem;
+    }
+  }
+
+  .group h3 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-faint);
+    margin-bottom: 0.6rem;
+  }
+</style>

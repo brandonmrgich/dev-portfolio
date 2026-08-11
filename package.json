@@ -1,0 +1,23 @@
+{
+  "name": "dev-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Developer portfolio for dev.brandonmrgich.com — static Astro site built from resume.json + projects.json",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.0"
+  },
+  "packageManager": "pnpm@10.6.0",
+  "pnpm": {
+    "//": "pnpm 10 blocks postinstall scripts by default. esbuild needs its to place the platform binary Astro's build depends on; without this the build fails identically in CI and locally.",
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

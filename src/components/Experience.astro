@@ -1,0 +1,101 @@
+---
+// ---
+// label: Experience
+// role: Work history from resume.json, newest first.
+// invariants: Entries with an empty `highlights` array are contract-continuity rows
+//   (same role, different employer) and render compactly with their `note` instead of
+//   an empty bullet list — an empty <ul> would read as "did nothing there".
+// last-touched: 2026-08-10
+// ---
+import resume from '../data/resume.json'
+import { range, dateAttr } from '../lib/format.js'
+---
+
+<section class="section" id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Experience</h2>
+      <span class="rule"></span>
+    </div>
+
+    <ol class="jobs">
+      {
+        resume.work.map((job) => (
+          <li class:list={['job', { compact: job.highlights.length === 0 }]}>
+            <div class="job-head">
+              <h3>
+                {job.position}
+                <span class="at">
+                  {job.name}
+                  {job.client && ` · ${job.client}`}
+                </span>
+              </h3>
+              <p class="mono when">
+                <time datetime={dateAttr(job.startDate)}>{range(job.startDate, job.endDate)}</time>
+                {job.location && <span class="where"> · {job.location}</span>}
+              </p>
+            </div>
+
+            {job.note && <p class="note">{job.note}</p>}
+
+            {job.highlights.length > 0 && (
+              <ul class="bullets">
+                {job.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .jobs {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .job.compact {
+    margin-top: -1.9rem;
+  }
+
+  .job-head {
+    margin-bottom: 0.9rem;
+  }
+
+  .job.compact .job-head {
+    margin-bottom: 0.4rem;
+  }
+
+  .job h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .job .at {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-top: 0.15rem;
+  }
+
+  .when {
+    margin: 0;
+  }
+
+  .where {
+    color: var(--text-faint);
+  }
+
+  .note {
+    font-size: 0.875rem;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-bottom: 0;
+  }
+</style>

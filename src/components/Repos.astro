@@ -1,0 +1,140 @@
+---
+// ---
+// label: Public repos
+// role: Curated public repositories and outside contributions, with live GitHub stats
+//   fetched at build time.
+// invariants:
+//   - The curated blurb from projects.json is the displayed description. GitHub's own
+//     description is only a fallback, never an override.
+//   - `live` may be null (API down, rate limited, repo renamed). Every field read from
+//     it must be guarded — the card still renders without it.
+// gotchas: This runs at build time only. A rebuild is what refreshes the stars count;
+//   the deploy workflow's weekly schedule exists for exactly that reason.
+// last-touched: 2026-08-10
+// ---
+import projects from '../data/projects.json'
+import { enrich, monthYear } from '../lib/github.js'
+
+const [repos, contributions] = await Promise.all([
+  enrich(projects.openSource),
+  enrich(projects.contributions),
+])
+---
+
+<section class="section" id="open-source">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Public Repositories</h2>
+      <span class="rule"></span>
+    </div>
+
+    <ul class="grid">
+      {
+        repos.map((r) => (
+          <li class="repo">
+            <h3>
+              <a href={r.url}>{r.name}</a>
+            </h3>
+            <p class="blurb">{r.blurb || r.live?.description}</p>
+            <p class="mono meta">
+              {r.live?.language && <span class="lang">{r.live.language}</span>}
+              {r.live && r.live.stars > 0 && <span>★ {r.live.stars}</span>}
+              {r.live?.pushedAt && <span>updated {monthYear(r.live.pushedAt)}</span>}
+              {r.live?.archived && <span>archived</span>}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      contributions.length > 0 && (
+        <div class="contrib">
+          <h3 class="contrib-head">Contributed to</h3>
+          <ul class="grid">
+            {contributions.map((r) => (
+              <li class="repo">
+                <h3>
+                  <a href={r.url}>{r.repo}</a>
+                </h3>
+                <p class="blurb">{r.blurb || r.live?.description}</p>
+                <p class="mono meta">
+                  {r.live?.language && <span class="lang">{r.live.language}</span>}
+                  {r.live && r.live.stars > 0 && <span>★ {r.live.stars}</span>}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 44rem) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .repo {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    background: var(--bg-raised);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .repo h3 {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+    word-break: break-word;
+  }
+
+  .repo h3 a {
+    text-decoration: none;
+  }
+
+  .repo h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .blurb {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+    flex: 1;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    margin: 0;
+    color: var(--text-faint);
+  }
+
+  .meta .lang {
+    color: var(--accent-dim);
+  }
+
+  .contrib {
+    margin-top: 2.25rem;
+  }
+
+  .contrib-head {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-faint);
+    margin-bottom: 0.85rem;
+  }
+</style>

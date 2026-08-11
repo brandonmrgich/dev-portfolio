@@ -1,0 +1,94 @@
+{
+  "_meta": {
+    "note": "Curated by hand. Entries with a `repo` are enriched at build time with live stars / language / last-push from the GitHub API (see src/lib/github.js). Entries marked `\"visibility\": \"private\"` are never fetched and never linked — they describe real work whose source stays closed.",
+    "lastCurated": "2026-08-10"
+  },
+
+  "featured": [
+    {
+      "name": "Music Platform",
+      "tagline": "Production music streaming, catalog management, and artist services platform.",
+      "visibility": "private",
+      "link": { "label": "brandonmrgich.com", "url": "https://brandonmrgich.com" },
+      "stack": ["TypeScript", "Fastify", "Next.js", "Postgres", "Prisma", "Turborepo", "Docker", "AWS", "Cloudflare"],
+      "scale": "6 applications · shared TS packages · edge services · ~199k LOC",
+      "highlights": [
+        "Architected a Turborepo/pnpm monorepo of 6 applications, shared TypeScript packages, and edge services.",
+        "Built a centralized admin platform for end-to-end content management — audio assets, releases, metadata, artwork, artist profiles, and rights information behind one interface.",
+        "Implemented a DDEX-aligned PostgreSQL model in Prisma covering recordings, releases, contributors, royalty ownership, and territorial rights, with integrity enforced at the database level.",
+        "Developed a secure media pipeline: multipart S3 uploads, content-addressed deduplication, audio metadata extraction, image processing, and Cloudflare edge streaming via signed, range-aware URLs.",
+        "Built custom auth supporting OAuth, email verification, creator onboarding, and role-based access control across admin and end-user domains.",
+        "Automated production infrastructure with Docker, GitHub Actions, self-hosted CI runners, EC2, and Nginx for reproducible deployments and centralized secrets."
+      ]
+    },
+    {
+      "name": "bam-claude",
+      "tagline": "AI agent orchestration and developer tooling system.",
+      "visibility": "private",
+      "stack": ["Go", "Claude Code", "Multi-agent orchestration"],
+      "highlights": [
+        "Engineered a version-controlled configuration and orchestration layer extending an agentic coding system with custom multi-agent workflows, domain-specific skills, and a structured knowledge base — used daily to drive production software delivery.",
+        "Built a deterministic orchestration engine that decomposes engineering plans into discrete tasks and dispatches them to specialized sub-agents (implementation, testing, documentation, independent compliance auditing), persisting execution state for resumable, auditable runs across sessions and machines.",
+        "Designed a knowledge pipeline promoting ideas through design essays, executable plans, and living documentation, connected by typed anchor links into a navigable dependency graph — preserving design rationale end to end while routing each agent only the context its task requires."
+      ]
+    },
+    {
+      "name": "Ephemeral CI Runners",
+      "tagline": "Self-hosted ephemeral GitHub Actions runners — one disposable container per job.",
+      "visibility": "private",
+      "stack": ["Python", "Docker", "containerd", "systemd", "GitHub Apps"],
+      "highlights": [
+        "Webhook-driven controller that launches a fresh container per CI job and tears it down on completion, so no build ever inherits a dirty workspace.",
+        "Runs the CI for the music platform monorepo on self-hosted hardware with a shared pnpm store bind-mounted across containers."
+      ]
+    },
+    {
+      "name": "LabelPipeline",
+      "tagline": "Automation pipeline for music distribution, royalties, and cataloging.",
+      "visibility": "private",
+      "stack": ["TypeScript", "Node.js"],
+      "highlights": [
+        "Automates the distribution and royalty accounting path between the catalog and downstream distributors.",
+        "Models royalty splits and rights ownership against industry metadata standards."
+      ]
+    },
+    {
+      "name": "BrainBeatsV4",
+      "tagline": "EEG-to-MIDI web application — record music with your brain.",
+      "visibility": "public",
+      "link": { "label": "github.com/Brainbeats-v4", "url": "https://github.com/Brainbeats-v4" },
+      "stack": ["TypeScript", "React", "Node.js"],
+      "context": "UCF senior design project",
+      "highlights": [
+        "Led a TypeScript migration of an inherited codebase with a team of four.",
+        "Redesigned data ingestion to expand device compatibility from two to over a dozen EEG devices."
+      ]
+    }
+  ],
+
+  "openSource": [
+    {
+      "repo": "brandonmrgich/castleminerz-mac-tools",
+      "blurb": "FNA/Wine IL patches that make CastleMiner Z run on Apple Silicon, plus optional single-player mods. No game code touched."
+    },
+    {
+      "repo": "brandonmrgich/dotfiles",
+      "blurb": "GNU Stow-managed shell, editor, and tooling config synchronized across a MacBook, a Debian agent host, and a Raspberry Pi."
+    },
+    {
+      "repo": "brandonmrgich/nvim",
+      "blurb": "Neovim configuration — Lua, LSP-first, tuned for polyglot work across Java, TypeScript, and Python."
+    },
+    {
+      "repo": "brandonmrgich/VST-prepper",
+      "blurb": "Python utility for batch-preparing VST plugin assets for a music production pipeline."
+    }
+  ],
+
+  "contributions": [
+    {
+      "repo": "showell/claude-collab",
+      "blurb": "Contributed to a multi-agent collaboration tool for agentic coding workflows."
+    }
+  ]
+}

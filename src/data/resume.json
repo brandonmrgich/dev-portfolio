@@ -1,0 +1,150 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "_meta": {
+    "source": "Resume_2026_V3_Two_Page.pdf (pdfTeX, 2026-07-30)",
+    "note": "Single source of truth for the site's Skills, Experience, Education and Awards sections. Edit here, not in the .astro templates. Phone number is deliberately omitted — it is on the PDF resume but should not be on a public web page.",
+    "lastSynced": "2026-08-10"
+  },
+  "basics": {
+    "name": "Brandon Mrgich",
+    "label": "Software Engineer",
+    "headline": "Software engineer on human-rated launch control systems at NASA Kennedy Space Center, building GUI platforms, deployment automation, and the music infrastructure I run on the side.",
+    "email": "brandonamrgich@gmail.com",
+    "location": {
+      "city": "Jacksonville",
+      "region": "FL",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "brandonmrgich",
+        "url": "https://github.com/brandonmrgich"
+      },
+      {
+        "network": "Music",
+        "username": "brandonmrgich.com",
+        "url": "https://brandonmrgich.com"
+      },
+      {
+        "network": "Links",
+        "username": "linktr.ee/brandonamrgich",
+        "url": "https://linktr.ee/brandonamrgich"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Amentum",
+      "position": "Launch Control Systems (LCS) Software Engineer",
+      "client": "NASA Kennedy Space Center",
+      "location": "Cape Canaveral, FL",
+      "startDate": "2024-10",
+      "endDate": null,
+      "highlights": [
+        "Architected and implemented a configurable Java-based GUI platform and application framework that enables independent development, packaging, deployment, and runtime integration of mission applications within a unified operator environment; currently supports 12 applications used by 8–10 software engineers with adoption continuing to expand.",
+        "Defined framework APIs, application lifecycle standards, shared services, reusable widgets, and common design patterns that standardized development practices across our team and accelerated delivery of operator-facing applications.",
+        "Designed and developed mission applications and backend services supporting real-time operational issue tracking, telemetry visualization, alarm monitoring, and system status awareness for operators.",
+        "Led deployment architecture and automation efforts using Python, Bash, and Ansible, creating the first fully automated deployment solution for the GUI software stack after the system previously lacked a repeatable deployment process.",
+        "Developed a one-button deployment framework capable of provisioning, configuring, and deploying applications, libraries, service definitions, and environment-specific configurations across multiple development and operational Linux environments containing hundreds of nodes per cluster.",
+        "Executed dozens of deployments across at least eight clusters, enabling rapid software delivery while eliminating manual deployment activities and reducing configuration drift between environments.",
+        "Modernized legacy operator displays through collaboration with operators and human factors engineers, improving information presentation and enabling personnel to identify critical events and system state changes with substantially reduced latency and information overload.",
+        "Established automated GUI testing infrastructure and expanded unit, integration, and functional testing capabilities through JUnit and Robot Framework, increasing validation coverage for safety-critical software releases.",
+        "Performed JVM profiling and performance optimization using VisualVM and custom analysis techniques, identifying memory leaks and high-footprint applications while implementing lazy loading, deferred initialization, and paging strategies that reduced memory utilization by approximately 80%.",
+        "Standardized performance optimization techniques through shared framework libraries, enabling other developers to adopt memory-efficient patterns without duplicating implementation effort.",
+        "Mentored nearly a dozen interns and junior engineers through architecture discussions, design reviews, implementation guidance, testing practices, and software engineering standards while leading initiatives focused on framework standardization and deployments."
+      ]
+    },
+    {
+      "name": "Jacobs Space Operations Group",
+      "position": "Launch Control Systems (LCS) Software Engineer",
+      "client": "NASA Kennedy Space Center",
+      "location": "Cape Canaveral, FL",
+      "startDate": "2024-01",
+      "endDate": "2024-09",
+      "note": "Same Launch Control Systems role and program — the support contract transitioned to Amentum in October 2024.",
+      "highlights": []
+    },
+    {
+      "name": "National Aeronautics and Space Administration (NASA)",
+      "position": "Spaceport Command and Control Software Development Intern",
+      "location": "Cape Canaveral, FL",
+      "startDate": "2023-05",
+      "endDate": "2023-12",
+      "highlights": [
+        "Contributed to a Class A, human-rated, safety-critical command and control system used by Master Console Operators to issue commands and monitor real-time telemetry.",
+        "Designed and implemented automated black-box tests integrated into CI/CD pipelines, reducing end-to-end test execution time from days to hours and enabling faster validation cycles."
+      ]
+    },
+    {
+      "name": "Cognizant",
+      "position": "Application Development and Maintenance Intern",
+      "location": "Remote US/Canada",
+      "startDate": "2022-06",
+      "endDate": "2022-08",
+      "highlights": [
+        "Developed enterprise software using Java Spring Boot, Maven, and Gradle.",
+        "Developed Node.js applications deployed on AWS.",
+        "Deployed and maintained Node.js and Spring Boot services."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": ["Java", "Python", "TypeScript", "JavaScript", "C/C++"]
+    },
+    {
+      "name": "Frontend & UI",
+      "keywords": ["React", "Next.js", "Tailwind", "JavaFX"]
+    },
+    {
+      "name": "Backend, Systems & Infra",
+      "keywords": [
+        "Node.js",
+        "Fastify",
+        "Spring Boot",
+        "Linux",
+        "Bash",
+        "Docker",
+        "AWS (EC2, S3)",
+        "Apache ActiveMQ"
+      ]
+    },
+    {
+      "name": "Automation, CI/CD & Testing",
+      "keywords": ["Ansible", "Jenkins", "Git", "JUnit", "Pytest", "Robot Framework"]
+    },
+    {
+      "name": "Data & APIs",
+      "keywords": ["SQL", "SQLite", "MariaDB", "MongoDB", "Postgres", "REST"]
+    },
+    {
+      "name": "AI & Agentic Tooling",
+      "keywords": [
+        "LLM agent orchestration",
+        "Multi-agent workflows",
+        "Claude Code / Claude API",
+        "Prompt & context engineering",
+        "AI-assisted development pipelines"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Central Florida",
+      "studyType": "B.S.",
+      "area": "Computer Science",
+      "startDate": "2017-06",
+      "endDate": "2023-12"
+    }
+  ],
+  "awards": [
+    {
+      "title": "NASA OSTEM: Shining Star Award nomination",
+      "awarder": "NASA OSTEM",
+      "date": "2023-08",
+      "summary": "Recognized for leadership, work ethic, and technical expertise."
+    }
+  ]
+}

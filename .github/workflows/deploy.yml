@@ -1,0 +1,70 @@
+# ---
+# label: Pages deploy
+# role: Build the Astro site and publish it to GitHub Pages at dev.brandonmrgich.com.
+# invariants:
+#   - GITHUB_TOKEN is exported into the build step on purpose: src/lib/github.js fetches
+#     live repo stats, and unauthenticated GitHub REST is 60 req/hr per IP shared across
+#     all Actions runners — effectively zero. Without the token the stats silently vanish.
+#   - Runs on GitHub-hosted runners, not the self-hosted ephemeral pool. This repo is
+#     public and tiny; it has no reason to depend on hardware that might be offline.
+# gotchas:
+#   - The weekly schedule exists so the "★ / updated" figures do not freeze at whatever
+#     they were on the last content push. Nothing else needs it.
+#   - concurrency cancel-in-progress:false — cancelling a half-finished Pages deployment
+#     can leave the site in a partial state.
+# last-touched: 2026-08-10
+# ---
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Mondays 06:00 UTC — refreshes build-time GitHub stats without a content change.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
