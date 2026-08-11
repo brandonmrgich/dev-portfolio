@@ -43,6 +43,36 @@
       ]
     },
     {
+      "name": "XNA-on-Apple-Silicon Keyboard Fix",
+      "tagline": "Root-caused a dead-keyboard bug affecting a whole class of XNA-era Windows games running on FNA under Wine on Apple Silicon.",
+      "visibility": "public",
+      "link": {
+        "label": "github.com/brandonmrgich/castleminerz-mac-tools",
+        "url": "https://github.com/brandonmrgich/castleminerz-mac-tools"
+      },
+      "stack": ["C#", "Mono.Cecil", "IL patching", "FNA", "Wine / wine-mono", "SDL"],
+      "context": "Worked reference case: CastleMiner Z, on the Pixel Port Wine wrapper (macOS 15, M1)",
+      "collaboration": "Diagnosed jointly with another developer across iterative test cycles — one running builds, one bisecting the runtime — rather than through pull requests on a shared repository.",
+      "highlights": [
+        "Traced a completely dead keyboard — mouse working, no key registering in menus or in-game — to the game initializing Windows Forms in-process, which desyncs the SDL input focus FNA's keyboard handling depends on. The mouse survived because it is polled globally and does not consult focus.",
+        "Fixed it by neutralizing that WinForms initialization with a six-instruction IL patch applied to the user's own installed copy, distributing only source and never any game code.",
+        "Generalized the result beyond the single title: a scanner identifies at-risk assemblies by their Application.AddMessageFilter / EnableVisualStyles call sites, and a standalone FNA probe isolates a runtime fault from a game fault.",
+        "Published the full root-cause trace so the method transfers to other affected games rather than ending as a one-title workaround."
+      ],
+      "upstream": [
+        {
+          "label": "FNA-XNA/FNA#671",
+          "title": "Dead keyboard when a game inits Mono WinForms in-process (SDL focus desync); window-creation crash on FNA 25.11+",
+          "url": "https://github.com/FNA-XNA/FNA/issues/671"
+        },
+        {
+          "label": "wine-mono/wine-mono#230",
+          "title": "In-process System.Windows.Forms desyncs SDL/FNA input focus (dead keyboard); FNA 25.x window-creation crash on 10.4+",
+          "url": "https://github.com/wine-mono/wine-mono/issues/230"
+        }
+      ]
+    },
+    {
       "name": "BrainBeatsV4",
       "tagline": "EEG-to-MIDI web application — record music with your brain.",
       "visibility": "public",
@@ -57,10 +87,6 @@
   ],
 
   "openSource": [
-    {
-      "repo": "brandonmrgich/castleminerz-mac-tools",
-      "blurb": "FNA/Wine IL patches that make CastleMiner Z run on Apple Silicon, plus optional single-player mods. No game code touched."
-    },
     {
       "repo": "brandonmrgich/dotfiles",
       "blurb": "GNU Stow-managed dotfiles — zsh, tmux, git, and starship config kept in one tracked tree."

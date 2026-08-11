@@ -44,6 +44,27 @@ import projects from '../data/projects.json'
               ))}
             </ul>
 
+            {p.collaboration && (
+              <p class="collab">
+                <span class="collab-label">Collaboration</span>
+                {p.collaboration}
+              </p>
+            )}
+
+            {p.upstream && (
+              <div class="upstream">
+                <span class="collab-label">Upstream issues filed</span>
+                <ul>
+                  {p.upstream.map((u) => (
+                    <li>
+                      <a href={u.url}>{u.label}</a>
+                      <span class="issue-title">{u.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <ul class="tag-list stack">
               {p.stack.map((s) => (
                 <li class="tag">{s}</li>
@@ -108,5 +129,56 @@ import projects from '../data/projects.json'
     margin-top: 1.1rem;
     padding-top: 1.1rem;
     border-top: 1px solid var(--border);
+  }
+
+  /* Collaboration and upstream issues answer "was this work seen by anyone else?" —
+     they sit between the highlights and the stack so the answer is adjacent to the
+     claim, not stranded at the bottom of the card. */
+  .collab-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-faint);
+    margin-bottom: 0.3rem;
+  }
+
+  .collab {
+    margin: 1.1rem 0 0;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .upstream {
+    margin-top: 1.1rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .upstream ul {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .upstream li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.15rem 0.6rem;
+  }
+
+  .upstream a {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .issue-title {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    flex: 1 1 18rem;
   }
 </style>
