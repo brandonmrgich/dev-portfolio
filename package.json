@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Developer portfolio for dev.brandonmrgich.com — static Astro site built from resume.json + projects.json",
+  "description": "Developer portfolio for dev.brandonmrgich.com \u2014 static Astro site built from resume.json + projects.json",
   "scripts": {
     "dev": "node scripts/fetch-avatar.mjs && astro dev",
     "start": "node scripts/fetch-avatar.mjs && astro dev",
@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "profile": "node scripts/build-profile.mjs",
-    "profile:publish": "node scripts/build-profile.mjs && bash scripts/publish-profile.sh"
+    "profile:publish": "node scripts/build-profile.mjs && bash scripts/publish-profile.sh",
+    "og": "node scripts/make-og.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -20,6 +21,12 @@
   "packageManager": "pnpm@10.6.0",
   "pnpm": {
     "//": "pnpm 10 blocks postinstall scripts by default. esbuild needs its to place the platform binary Astro's build depends on; without this the build fails identically in CI and locally.",
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }

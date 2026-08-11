@@ -22,12 +22,19 @@
 //     phone to show navigation for a page this short is not a trade worth making.
 // last-touched: 2026-08-10
 // ---
+// Ids that are not rendered (Writing with no posts, Support while disabled) are
+// filtered out at runtime rather than pruned here — the rail must not show a dot that
+// scrolls nowhere, but this list should not have to know each section's render
+// condition.
 const sections = [
   { id: 'skills', label: 'Skills' },
   { id: 'work', label: 'Selected Work' },
+  { id: 'writing', label: 'Writing' },
   { id: 'open-source', label: 'Repositories' },
   { id: 'experience', label: 'Experience' },
+  { id: 'how-i-work', label: 'How I Work' },
   { id: 'education', label: 'Education' },
+  { id: 'support', label: 'Support' },
 ]
 ---
 
@@ -53,6 +60,17 @@ const sections = [
       a,
     ]),
   )
+
+  // Some sections render conditionally (Writing with no posts, Support while disabled).
+  // Their rail entries are removed outright rather than left as dots that scroll
+  // nowhere. Done here instead of in the template so the template does not have to
+  // duplicate every section's render condition.
+  for (const [id, link] of links) {
+    if (!document.getElementById(id as string)) {
+      link.closest('li')?.remove()
+      links.delete(id)
+    }
+  }
 
   const targets = [...links.keys()]
     .map((id) => document.getElementById(id as string))

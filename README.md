@@ -12,8 +12,13 @@ The site is **data-driven, not template-driven**. Two JSON files hold everything
 
 | File                     | Owns                                                    |
 | ------------------------ | ------------------------------------------------------- |
-| `src/data/resume.json`   | Skills, experience, education, awards, bio, contact      |
+| `src/data/resume.json`   | Skills, experience, education, awards, bio               |
 | `src/data/projects.json` | Featured work, curated public repos, outside contributions |
+| `src/data/site.json`     | "How I Work" principles, support/donation links          |
+
+Posts live in `src/content/writing/*.md` and are schema-validated by
+`src/content.config.ts` — a post missing a date or summary fails the build rather than
+rendering a broken card.
 
 To update the site, edit a JSON file. The `.astro` components make no editorial
 decisions — they render what the data says.
@@ -48,6 +53,25 @@ pnpm preview
 
 Set `GITHUB_TOKEN` locally only if you hit the unauthenticated rate limit (60/hr per IP);
 a handful of repos will not.
+
+## Social preview image
+
+`public/og.png` is the card shown when the link is shared in Slack, LinkedIn, iMessage,
+or Discord. Regenerate after changing your name or title:
+
+```sh
+pnpm og    # -> public/og.png (committed)
+```
+
+**Run this locally and commit the result — it is deliberately not part of `pnpm build`.**
+SVG text rasterization depends on fonts installed on the host, so generating it on a CI
+runner would render differently, or blank. A committed PNG is identical everywhere.
+
+## Enabling the support links
+
+`site.json` has `support.enabled: false`. The section renders only when it is `true` —
+flip it once the accounts in `support.links` actually exist. A dead "Sponsor" link reads
+as abandoned, which is worse than not asking at all.
 
 ## GitHub profile README
 

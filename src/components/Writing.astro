@@ -1,0 +1,98 @@
+---
+// ---
+// label: Writing teaser
+// role: Surfaces recent posts on the home page and routes to the full index.
+// invariants:
+//   - Renders nothing when there are no published posts. An empty "Writing" heading
+//     advertises abandonment; absence advertises nothing.
+//   - Shows at most LIMIT posts. The home page is a summary; /writing is the list.
+// last-touched: 2026-08-10
+// ---
+import { getCollection } from 'astro:content'
+
+const LIMIT = 3
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, LIMIT)
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+---
+
+{
+  posts.length > 0 && (
+    <section class="section" id="writing">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Writing</h2>
+          <span class="rule" />
+        </div>
+        <p class="section-note">
+          Most of what I build is in private repositories. These are the parts of the
+          reasoning that travel on their own.
+        </p>
+
+        <ol class="posts">
+          {posts.map((post) => (
+            <li>
+              <p class="mono date">
+                <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+              </p>
+              <h3>
+                <a href={`/writing/${post.id}/`}>{post.data.title}</a>
+              </h3>
+              <p class="summary">{post.data.summary}</p>
+            </li>
+          ))}
+        </ol>
+
+        <p class="more mono">
+          <a href="/writing/">All writing →</a>
+        </p>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .posts {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .date {
+    margin: 0 0 0.3rem;
+  }
+
+  .posts h3 {
+    font-size: 1.0625rem;
+    font-weight: 620;
+    margin-bottom: 0.35rem;
+  }
+
+  .posts h3 a {
+    text-decoration: none;
+  }
+
+  .posts h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .summary {
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .more {
+    margin: 1.6rem 0 0;
+  }
+
+  .more a {
+    text-decoration: none;
+  }
+
+  .more a:hover {
+    text-decoration: underline;
+  }
+</style>

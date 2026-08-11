@@ -1,0 +1,108 @@
+---
+// ---
+// label: writing index
+// role: List of published posts, newest first.
+// invariants: Drafts are excluded from the build output entirely, not merely hidden
+//   with CSS — an unlisted-but-fetchable draft is still published.
+// last-touched: 2026-08-10
+// ---
+import { getCollection } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+)
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+---
+
+<Base
+  title="Writing — Brandon Mrgich"
+  description="Notes on debugging, systems, and the engineering behind the work."
+>
+  <div class="wrap head">
+    <p class="mono"><a href="/">← Brandon Mrgich</a></p>
+    <h1>Writing</h1>
+    <p class="lede">
+      Most of what I build lives in private repositories. These are the parts of the
+      reasoning that travel on their own.
+    </p>
+  </div>
+
+  <div class="wrap">
+    <ol class="posts">
+      {
+        posts.map((post) => (
+          <li>
+            <p class="mono date">
+              <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+            </p>
+            <h2>
+              <a href={`/writing/${post.id}/`}>{post.data.title}</a>
+            </h2>
+            <p class="summary">{post.data.summary}</p>
+            <ul class="tag-list">
+              {post.data.tags.map((t) => (
+                <li class="tag">{t}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding: 4rem 0 2.5rem;
+  }
+
+  .head h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0.75rem 0 0.85rem;
+  }
+
+  .lede {
+    color: var(--text-muted);
+    font-size: 1.0625rem;
+    max-width: 58ch;
+  }
+
+  .posts {
+    display: grid;
+    gap: 2.25rem;
+    padding-bottom: 4rem;
+  }
+
+  .posts li {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+
+  .date {
+    margin: 0 0 0.4rem;
+  }
+
+  .posts h2 {
+    font-size: 1.3125rem;
+    font-weight: 650;
+    margin-bottom: 0.5rem;
+  }
+
+  .posts h2 a {
+    text-decoration: none;
+  }
+
+  .posts h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .summary {
+    color: var(--text-muted);
+    margin-bottom: 0.9rem;
+  }
+</style>

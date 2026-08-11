@@ -1,0 +1,187 @@
+---
+// ---
+// label: post page
+// role: Renders one post from the writing collection.
+// invariants:
+//   - getStaticPaths filters drafts, so a draft has no route at all rather than an
+//     unlinked-but-reachable URL.
+//   - The <article> width is narrower than the site shell on purpose. Prose wants a
+//     ~70ch measure; the card grids on the home page do not.
+// last-touched: 2026-08-10
+// ---
+import { getCollection, render } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', ({ data }) => !data.draft)
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+---
+
+<Base title={`${post.data.title} — Brandon Mrgich`} description={post.data.summary}>
+  <article class="wrap post">
+    <p class="mono back"><a href="/writing/">← Writing</a></p>
+
+    <header>
+      <p class="mono date">
+        <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+      </p>
+      <h1>{post.data.title}</h1>
+      <ul class="tag-list">
+        {post.data.tags.map((t) => <li class="tag">{t}</li>)}
+      </ul>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      post.data.source && (
+        <footer class="source">
+          <a href={post.data.source.url}>{post.data.source.label}</a>
+        </footer>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .post {
+    max-width: 46rem;
+    padding: 3rem 1.5rem 4.5rem;
+  }
+
+  .back {
+    margin-bottom: 2rem;
+  }
+
+  .date {
+    margin: 0 0 0.5rem;
+  }
+
+  header h1 {
+    font-size: clamp(1.85rem, 4.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 1rem;
+  }
+
+  header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.25rem;
+  }
+
+  .source {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+</style>
+
+<style is:global>
+  /* Not scoped: this styles markdown-generated elements, which carry no scope attribute
+     because they are produced by the content pipeline rather than by this component. */
+  .prose > * {
+    max-width: 70ch;
+  }
+
+  .prose h2 {
+    font-size: 1.3125rem;
+    font-weight: 650;
+    margin: 2.5rem 0 0.85rem;
+    letter-spacing: -0.01em;
+  }
+
+  .prose p {
+    margin-bottom: 1.15rem;
+    color: var(--text-muted);
+  }
+
+  .prose strong {
+    color: var(--text);
+    font-weight: 620;
+  }
+
+  .prose ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+  }
+
+  .prose li {
+    position: relative;
+    padding-left: 1.15rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-muted);
+  }
+
+  .prose li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.66em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+  }
+
+  .prose pre {
+    background: var(--bg-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--bg-inset);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+  }
+
+  /* Wide content must scroll inside its own box; the page body never scrolls sideways. */
+  .prose .table-scroll,
+  .prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .prose th,
+  .prose td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .prose th {
+    background: var(--bg-inset);
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+
+  .prose td {
+    color: var(--text-muted);
+  }
+</style>

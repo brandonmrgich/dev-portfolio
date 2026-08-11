@@ -1,0 +1,63 @@
+---
+// ---
+// label: Principles
+// role: "How I work" — the design doctrines applied on shape decisions.
+// invariants: Content lives in site.json. These are stated as working rules with a
+//   consequence, not as adjectives — "make state honest" is checkable, "detail-oriented"
+//   is not, and the difference is the entire value of the section.
+// last-touched: 2026-08-10
+// ---
+import site from '../data/site.json'
+---
+
+<section class="section" id="how-i-work">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How I Work</h2>
+      <span class="rule"></span>
+    </div>
+
+    <ol class="principles">
+      {
+        site.principles.map((p, i) => (
+          <li>
+            <span class="num mono">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{p.name}</h3>
+              <p>{p.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .principles {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .principles li {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .num {
+    color: var(--accent-dim);
+    padding-top: 0.2rem;
+    flex: none;
+  }
+
+  .principles h3 {
+    font-size: 1rem;
+    font-weight: 620;
+    margin-bottom: 0.3rem;
+  }
+
+  .principles p {
+    color: var(--text-muted);
+    margin: 0;
+  }
+</style>

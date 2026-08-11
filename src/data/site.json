@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "note": "Site-level content that is not resume data and not a project. Kept out of resume.json so that file stays a valid, portable JSON Resume document.",
+    "lastEdited": "2026-08-10"
+  },
+
+  "principles": [
+    {
+      "name": "Make state honest",
+      "body": "Most bugs are a type that disagrees with reality — wider than the real states, narrower than them, or holding two shapes for one truth. The fix belongs in the shape of the data, not in a comment warning about it or an adapter smoothing it over."
+    },
+    {
+      "name": "Eliminate, don't paper over",
+      "body": "Contorted code is information. A step counter, a translation helper, a branch that defers the problem to a later layer — each is telling you the model is wrong. The test of a real fix is whether it lets you delete something."
+    },
+    {
+      "name": "Check the claim",
+      "body": "A removed guard with a reassuring comment is worse than no change at all. When something asserts that a check is unnecessary or a bug class is handled, probe it — don't reason about whether it sounds right."
+    },
+    {
+      "name": "Ask the running system",
+      "body": "Source describes intent; only the host holds state, and the two drift with no commit to mark it. If a claim about what a system is doing needs \"according to the repo\" to be true, go measure the machine instead."
+    }
+  ],
+
+  "support": {
+    "enabled": false,
+    "blurb": "If something here saved you time — a patch, a write-up, a fix for a bug nobody else had documented — you can put a few dollars toward the next one.",
+    "links": [
+      {
+        "label": "GitHub Sponsors",
+        "url": "https://github.com/sponsors/brandonmrgich",
+        "note": "0% platform fee"
+      },
+      {
+        "label": "Ko-fi",
+        "url": "https://ko-fi.com/brandonmrgich",
+        "note": "one-off, no account needed"
+      }
+    ]
+  }
+}
