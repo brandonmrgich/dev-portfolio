@@ -58,9 +58,10 @@ const sections = [
   </ul>
 </nav>
 
-<!-- Narrow screens: sticky chip bar with a scroll-progress line. -->
+<!-- Narrow screens: sticky chip bar. The progress line sits at the bottom and its
+     leading edge tracks the active chip, so it reads as an underline sweeping across
+     the tags rather than a second, contradictory measure of position. -->
 <nav class="bar" aria-label="Page sections">
-  <div class="progress" aria-hidden="true"><span data-nav-progress></span></div>
   <ul data-nav-track>
     {
       sections.map((s) => (
@@ -72,6 +73,7 @@ const sections = [
       ))
     }
   </ul>
+  <div class="progress" aria-hidden="true"><span data-nav-progress></span></div>
 </nav>
 
 <script>
@@ -118,27 +120,60 @@ const sections = [
 
   const LINE = 0.35
 
+  /**
+   * Draw the progress line so its leading edge sits under the active chip, advancing
+   * across that chip as you read through the section.
+   *
+   * Deliberately NOT document-scroll percentage. Section heights vary enormously —
+   * Experience dwarfs Education — so a percentage fill and an evenly-spaced chip strip
+   * are different coordinate spaces, and the fill visibly runs ahead of the tag it is
+   * supposed to correspond to. Measuring in the chip track's own space is the only way
+   * the two agree.
+   */
+  function paint(id: string, fraction: number) {
+    if (!progress || !track) return
+    const chip = links.get(id)?.find((el) => el.closest('[data-nav-track]'))
+    if (!chip) return
+
+    // Content coordinates, then shifted into viewport space — the strip scrolls
+    // horizontally, so the same chip sits at different screen positions over time.
+    const end = chip.offsetLeft + chip.offsetWidth * Math.min(Math.max(fraction, 0), 1)
+    progress.style.width = `${Math.max(0, end - track.scrollLeft)}px`
+  }
+
   function update() {
     if (!targets.length) return
 
     const doc = document.documentElement
-    const max = doc.scrollHeight - window.innerHeight
-    if (progress) progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`
 
     // At the bottom of the document no further scrolling is possible, so the final
     // section can never satisfy the line test on its own. It wins by position instead.
     if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) {
-      setActive(targets[targets.length - 1].id)
+      const last = targets[targets.length - 1]
+      setActive(last.id)
+      paint(last.id, 1)
       return
     }
 
     const line = window.innerHeight * LINE
     let current = targets[0]
-    for (const el of targets) {
-      if (el.getBoundingClientRect().top <= line) current = el
-      else break
+    let index = 0
+    for (let i = 0; i < targets.length; i++) {
+      if (targets[i].getBoundingClientRect().top <= line) {
+        current = targets[i]
+        index = i
+      } else break
     }
+
     setActive(current.id)
+
+    // How far the reading line has travelled through the active section, measured
+    // against the next section's start rather than the element's own height — the gap
+    // between sections belongs to the section you are still reading.
+    const top = current.getBoundingClientRect().top - line
+    const next = targets[index + 1]
+    const span = next ? next.getBoundingClientRect().top - line - top : current.offsetHeight
+    paint(current.id, span > 0 ? -top / span : 0)
   }
 
   let queued = false
@@ -153,6 +188,10 @@ const sections = [
 
   addEventListener('scroll', schedule, { passive: true })
   addEventListener('resize', schedule)
+  // The strip scrolls independently of the page, and the fill is drawn in viewport
+  // coordinates — so a horizontal swipe of the chips must redraw it too, or the line
+  // detaches from the tag it is tracking.
+  track?.addEventListener('scroll', schedule, { passive: true })
   update()
 </script>
 
@@ -254,14 +293,23 @@ const sections = [
       position: sticky;
       top: 0;
       z-index: 6;
+      /* `position: sticky` is itself a positioned element, so it already establishes the
+         containing block the absolutely positioned progress line resolves against. */
       background: color-mix(in srgb, var(--bg) 88%, transparent);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
 
+    /* Bottom of the bar so it underlines the chips it tracks. Clipped to the bar, since
+       the fill is measured in the strip's coordinates and can exceed the viewport. */
     .progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
       height: 2px;
-      background: transparent;
+      overflow: hidden;
+      pointer-events: none;
     }
 
     .progress span {
@@ -276,7 +324,7 @@ const sections = [
       gap: 0.25rem;
       overflow-x: auto;
       scrollbar-width: none;
-      padding: 0.35rem 0.75rem 0.4rem;
+      padding: 0.4rem 0.75rem 0.5rem;
       /* Rubber-band horizontally without the page ever scrolling sideways. */
       overscroll-behavior-x: contain;
     }

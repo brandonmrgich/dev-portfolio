@@ -67,11 +67,25 @@ pnpm og    # -> public/og.png (committed)
 SVG text rasterization depends on fonts installed on the host, so generating it on a CI
 runner would render differently, or blank. A committed PNG is identical everywhere.
 
-## Enabling the support links
+## Donation CTAs
 
-`site.json` has `support.enabled: false`. The section renders only when it is `true` —
-flip it once the accounts in `support.links` actually exist. A dead "Sponsor" link reads
-as abandoned, which is worse than not asking at all.
+`site.json` has `support.enabled: false`. **Nothing renders while it is false**, at any
+placement — flip it once the accounts in `support.links` actually exist. A dead donate
+button reads as abandoned, which is worse than not asking at all.
+
+Links are defined once; only the wording changes per placement. Adding a payment
+provider is a one-line edit to `support.links` and every CTA on the site picks it up.
+
+```astro
+<SupportCTA />                              <!-- page section, default copy -->
+<SupportCTA cta="post" />                   <!-- end of a write-up -->
+<SupportCTA cta="tool" variant="inline" />  <!-- boxed, mid-page -->
+<SupportCTA variant="buttons" />            <!-- buttons only, no heading -->
+```
+
+`cta` selects a named copy preset from `support.ctas`; `variant` selects the layout. Add
+a preset to `site.json` rather than passing wording at the call site — otherwise the copy
+scatters across components and drifts.
 
 ## GitHub profile README
 

@@ -30,7 +30,29 @@
 
   "support": {
     "enabled": false,
-    "blurb": "If something here saved you time — a patch, a write-up, a fix for a bug nobody else had documented — you can put a few dollars toward the next one.",
+    "_note": "Every URL here is a placeholder until the corresponding account exists. Nothing renders while enabled is false — a dead donate button reads as abandoned, which is worse than not asking.",
+
+    "_ctaNote": "CTAs are named presets, not one fixed block. <SupportCTA cta=\"...\" /> drops the same links anywhere with copy matched to where it sits — a post footer asks differently than a landing section. Add a preset here rather than hardcoding wording in a component.",
+
+    "ctas": {
+      "default": {
+        "heading": "Support",
+        "blurb": "If something here saved you time — a patch, a write-up, a fix for a bug nobody else had documented — you can put a few dollars toward the next one."
+      },
+      "post": {
+        "heading": "Found this useful?",
+        "blurb": "This one took weeks of elimination to write down. If it saved you that, you can chip in toward the next investigation."
+      },
+      "tool": {
+        "heading": "Did this fix your game?",
+        "blurb": "The patch is free and always will be. If it got your keyboard working, a few dollars covers the next weekend of debugging someone else's."
+      },
+      "compact": {
+        "heading": "",
+        "blurb": ""
+      }
+    },
+
     "links": [
       {
         "label": "GitHub Sponsors",

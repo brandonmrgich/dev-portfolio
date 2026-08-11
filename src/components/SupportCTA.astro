@@ -1,0 +1,135 @@
+---
+// ---
+// label: SupportCTA
+// role: Reusable donation call-to-action. One set of links, many placements, each with
+//   copy suited to where it sits.
+// invariants:
+//   - Renders NOTHING while site.support.enabled is false, regardless of placement. A
+//     dead donate button reads as abandoned, which is worse than never asking.
+//   - The links are defined once in site.json. Only the wording varies per placement —
+//     adding a payment provider must never mean editing several components.
+//   - Copy comes from a named preset in site.json, not from props at the call site.
+//     Otherwise the wording scatters across the codebase and drifts.
+// usage:
+//   <SupportCTA />                        section, default copy
+//   <SupportCTA cta="post" />             end of a write-up
+//   <SupportCTA cta="tool" variant="inline" />   inside a page, boxed
+//   <SupportCTA variant="buttons" />      just the buttons, no heading
+// last-touched: 2026-08-10
+// ---
+import site from '../data/site.json'
+
+interface Props {
+  cta?: string
+  variant?: 'section' | 'inline' | 'buttons'
+}
+
+const { cta = 'default', variant = 'section' } = Astro.props
+const { support } = site
+
+const copy = support.ctas[cta as keyof typeof support.ctas] ?? support.ctas.default
+const show = support.enabled && support.links.length > 0
+---
+
+{
+  show && (
+    <div class:list={['cta', variant]} id={variant === 'section' ? 'support' : undefined}>
+      <div class={variant === 'section' ? 'wrap' : undefined}>
+        {variant === 'section' && copy.heading && (
+          <div class="section-head">
+            <h2>{copy.heading}</h2>
+            <span class="rule" />
+          </div>
+        )}
+
+        {variant !== 'section' && copy.heading && <h3>{copy.heading}</h3>}
+        {copy.blurb && <p class="blurb">{copy.blurb}</p>}
+
+        <ul class="links">
+          {support.links.map((l) => (
+            <li>
+              <a href={l.url}>
+                {l.label}
+                {l.note && <span class="note">{l.note}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .cta.section {
+    padding: 3.25rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .cta.inline {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+  }
+
+  .cta.buttons {
+    margin: 1.5rem 0;
+  }
+
+  .cta h3 {
+    font-size: 1.0625rem;
+    font-weight: 620;
+    margin-bottom: 0.5rem;
+  }
+
+  .blurb {
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    max-width: var(--measure);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    padding: 0.6rem 1rem;
+    font-size: 0.9375rem;
+    transition: border-color 140ms ease;
+  }
+
+  .cta.inline .links a {
+    background: var(--bg);
+  }
+
+  .links a:hover {
+    border-color: var(--accent);
+  }
+
+  .note {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .links a {
+      transition: none;
+    }
+  }
+</style>
