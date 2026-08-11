@@ -14,12 +14,12 @@
       "body": "Contorted code is information. A step counter, a translation helper, a branch that defers the problem to a later layer — each is telling you the model is wrong. The test of a real fix is whether it lets you delete something."
     },
     {
-      "name": "Check the claim",
-      "body": "A removed guard with a reassuring comment is worse than no change at all. When something asserts that a check is unnecessary or a bug class is handled, probe it — don't reason about whether it sounds right."
+      "name": "Test the claim, not the explanation",
+      "body": "A comment explaining why a check was removed is not evidence the check was unnecessary. Neither is a commit message, a ticket, or anyone's recollection — mine included. When a change rests on \"this can't happen,\" I go try to make it happen. On safety-critical software that habit is the job; everywhere else it is still cheaper than the incident."
     },
     {
-      "name": "Ask the running system",
-      "body": "Source describes intent; only the host holds state, and the two drift with no commit to mark it. If a claim about what a system is doing needs \"according to the repo\" to be true, go measure the machine instead."
+      "name": "Go look at the machine",
+      "body": "The repository describes intent. The running system holds the truth, and the two drift without anything being committed to mark it. Before I say what a deployed system is doing, I go check the deployed system. Configuration drift between environments isn't an edge case — it's the default outcome of not looking."
     }
   ],
 
