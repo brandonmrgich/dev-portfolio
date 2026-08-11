@@ -11,9 +11,13 @@
 //     stale id is skipped silently rather than throwing (getElementById -> null is
 //     filtered), so a typo degrades to a dead link, never a broken page.
 // gotchas:
-//   - The observer uses a thin horizontal band (rootMargin top/bottom) rather than a
-//     threshold. Thresholds misfire on sections taller than the viewport, which
-//     Experience always is — it can never be "50% visible".
+//   - Active section is chosen by scroll position against a line near the top of the
+//     viewport, NOT by an IntersectionObserver band. Both a visibility threshold and a
+//     mid-viewport band leave dead zones: a threshold can never fire for a section
+//     taller than the screen, and a band at 45% is unreachable both by a short section
+//     after an anchor click and by the final section at the end of the document.
+//   - The last section needs the explicit at-bottom case. Without it, Education is
+//     permanently unhighlightable because the page runs out of scroll first.
 //   - Hidden under 64rem: there is no gutter to put it in, and overlaying content on a
 //     phone to show navigation for a page this short is not a trade worth making.
 // last-touched: 2026-08-10
@@ -63,23 +67,49 @@ const sections = [
     active = id
   }
 
-  // A thin band across the middle of the viewport. Whichever section crosses it owns
-  // the marker — this is stable for sections both shorter and much taller than the
-  // screen, which a visibility threshold is not.
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) setActive(entry.target.id)
-      }
-    },
-    { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
-  )
+  // The active section is the last one whose top has passed a line near the top of the
+  // viewport. Deliberately NOT an IntersectionObserver band: a band placed mid-viewport
+  // has two dead zones. A section shorter than the band's offset never reaches it after
+  // an anchor click (which lands the section top at y=0), and the final section can
+  // never reach it at all, because the document stops scrolling first.
+  const LINE = 0.35
 
-  targets.forEach((el) => observer.observe(el))
+  function update() {
+    if (!targets.length) return
 
-  // Before the first section reaches the band, nothing is marked. Seed the first one
-  // so the rail never renders in a stateless-looking blank condition.
-  if (targets.length) setActive(targets[0].id)
+    // At the bottom of the document no further scrolling is possible, so the last
+    // section can never satisfy the line test on its own. It wins by position instead.
+    const atBottom =
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4
+    if (atBottom) {
+      setActive(targets[targets.length - 1].id)
+      return
+    }
+
+    const line = window.innerHeight * LINE
+    let current = targets[0]
+    for (const el of targets) {
+      if (el.getBoundingClientRect().top <= line) current = el
+      else break
+    }
+    setActive(current.id)
+  }
+
+  // Scroll fires far more often than the marker can meaningfully change; collapse a
+  // burst of events into one read per frame so layout is measured once.
+  let queued = false
+  function schedule() {
+    if (queued) return
+    queued = true
+    requestAnimationFrame(() => {
+      queued = false
+      update()
+    })
+  }
+
+  addEventListener('scroll', schedule, { passive: true })
+  addEventListener('resize', schedule)
+  update()
 </script>
 
 <style>
