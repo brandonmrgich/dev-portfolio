@@ -14,12 +14,14 @@ import Featured from '../components/Featured.astro'
 import Repos from '../components/Repos.astro'
 import Experience from '../components/Experience.astro'
 import Credentials from '../components/Credentials.astro'
+import SectionRail from '../components/SectionRail.astro'
 import resume from '../data/resume.json'
 
 const title = `${resume.basics.name} — ${resume.basics.label}`
 ---
 
 <Base title={title} description={resume.basics.headline}>
+  <SectionRail />
   <Hero />
   <Skills />
   <Featured />

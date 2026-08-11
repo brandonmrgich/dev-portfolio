@@ -4,8 +4,8 @@
 // role: Document shell — head metadata, JSON-LD Person, skip link, footer.
 // invariants:
 //   - Canonical URLs derive from Astro.site (astro.config.mjs), never a hardcoded host.
-//   - Zero client JS. If a component ever needs a client:* directive, that is a
-//     deliberate decision, not a default.
+//   - The only client-side JavaScript on the site is the scroll-spy in SectionRail.
+//     Anything else needing JS is a deliberate decision to re-argue, not a default.
 // gotchas: `new URL(path, Astro.site)` requires the trailing-slash-safe path; passing
 //   an absolute '/foo' against a site with no base is correct here.
 // last-touched: 2026-08-10

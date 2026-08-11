@@ -1,0 +1,182 @@
+---
+// ---
+// label: SectionRail
+// role: Fixed timeline-style rail on the right edge marking which section is in view.
+// invariants:
+//   - This is the ONLY client-side JavaScript on the site. It is a deliberate island,
+//     not a default — see the note in README. Everything it does is progressive
+//     enhancement: with JS off the rail is still a working list of anchor links, just
+//     without the active marker.
+//   - `sections` must stay in sync with the section ids rendered by index.astro. A
+//     stale id is skipped silently rather than throwing (getElementById -> null is
+//     filtered), so a typo degrades to a dead link, never a broken page.
+// gotchas:
+//   - The observer uses a thin horizontal band (rootMargin top/bottom) rather than a
+//     threshold. Thresholds misfire on sections taller than the viewport, which
+//     Experience always is — it can never be "50% visible".
+//   - Hidden under 64rem: there is no gutter to put it in, and overlaying content on a
+//     phone to show navigation for a page this short is not a trade worth making.
+// last-touched: 2026-08-10
+// ---
+const sections = [
+  { id: 'skills', label: 'Skills' },
+  { id: 'work', label: 'Selected Work' },
+  { id: 'open-source', label: 'Repositories' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education' },
+]
+---
+
+<nav class="rail" aria-label="Page sections">
+  <ul>
+    {
+      sections.map((s) => (
+        <li>
+          <a href={`#${s.id}`} data-rail-link={s.id}>
+            <span class="dot" aria-hidden="true" />
+            <span class="label">{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  const links = new Map(
+    [...document.querySelectorAll('[data-rail-link]')].map((a) => [
+      (a as HTMLElement).dataset.railLink,
+      a,
+    ]),
+  )
+
+  const targets = [...links.keys()]
+    .map((id) => document.getElementById(id as string))
+    .filter((el): el is HTMLElement => el !== null)
+
+  let active: string | null = null
+
+  function setActive(id: string) {
+    if (id === active) return
+    if (active) links.get(active)?.removeAttribute('aria-current')
+    links.get(id)?.setAttribute('aria-current', 'true')
+    active = id
+  }
+
+  // A thin band across the middle of the viewport. Whichever section crosses it owns
+  // the marker — this is stable for sections both shorter and much taller than the
+  // screen, which a visibility threshold is not.
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setActive(entry.target.id)
+      }
+    },
+    { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+  )
+
+  targets.forEach((el) => observer.observe(el))
+
+  // Before the first section reaches the band, nothing is marked. Seed the first one
+  // so the rail never renders in a stateless-looking blank condition.
+  if (targets.length) setActive(targets[0].id)
+</script>
+
+<style>
+  .rail {
+    position: fixed;
+    top: 50%;
+    right: 1.75rem;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  /* No gutter to spare below this width, and the page is short enough that overlaying
+     content to navigate it would be a net loss. */
+  @media (max-width: 64rem) {
+    .rail {
+      display: none;
+    }
+  }
+
+  .rail ul {
+    position: relative;
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  /* The connecting line, drawn behind the dots at their center. */
+  .rail ul::before {
+    content: '';
+    position: absolute;
+    left: 3.5px;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    width: 1px;
+    background: var(--border-strong);
+  }
+
+  .rail a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  .dot {
+    position: relative;
+    z-index: 1;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+    transition: box-shadow 140ms ease, background 140ms ease;
+    flex: none;
+  }
+
+  .label {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 140ms ease, transform 140ms ease, color 140ms ease;
+  }
+
+  /* Labels stay out of the way until the rail is engaged — hovered, focused, or
+     marking the current section. */
+  .rail:hover .label,
+  .rail:focus-within .label,
+  .rail a[aria-current] .label {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rail a:hover .dot,
+  .rail a:focus-visible .dot {
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  .rail a:hover,
+  .rail a:focus-visible {
+    color: var(--text-muted);
+  }
+
+  .rail a[aria-current] .dot {
+    background: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent), 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .rail a[aria-current] {
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot,
+    .label {
+      transition: none;
+    }
+  }
+</style>

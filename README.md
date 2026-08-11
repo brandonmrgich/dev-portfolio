@@ -79,5 +79,8 @@ src/
 public/CNAME
 ```
 
-No CSS framework and no client-side JavaScript — the page is semantic HTML with an
-inlined stylesheet.
+No CSS framework. The only client-side JavaScript is the scroll-spy in
+`SectionRail.astro`, which marks the section currently in view — roughly 20 lines behind
+an `IntersectionObserver`. It is pure progressive enhancement: with JavaScript disabled
+the rail is still a working list of anchor links, just without the active marker.
+Everything else is semantic HTML with an inlined stylesheet.
