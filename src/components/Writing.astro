@@ -3,18 +3,24 @@
 // label: Writing teaser
 // role: Surfaces recent posts on the home page and routes to the full index.
 // invariants:
+//   - Gated on site.writing.enabled. While that is false the routes under
+//     src/pages/_writing/ are not generated either, so this section must not link to
+//     pages that would 404. Both switches move together.
 //   - Renders nothing when there are no published posts. An empty "Writing" heading
 //     advertises abandonment; absence advertises nothing.
 //   - Shows at most LIMIT posts. The home page is a summary; /writing is the list.
 // last-touched: 2026-08-10
 // ---
 import { getCollection } from 'astro:content'
+import site from '../data/site.json'
 
 const LIMIT = 3
 
-const posts = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, LIMIT)
+const posts = site.writing.enabled
+  ? (await getCollection('writing', ({ data }) => !data.draft))
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .slice(0, LIMIT)
+  : []
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })

@@ -1,0 +1,312 @@
+---
+// ---
+// label: SectionNav
+// role: Section navigation and "where am I" orientation. Renders two presentations of
+//   the same state — a vertical timeline rail on wide screens, a sticky horizontal
+//   chip bar on narrow ones — driven by a single scroll-spy.
+// invariants:
+//   - ONE source of truth for the active section. Both presentations are marked from
+//     the same update(); they can never disagree. Two independent spies would drift.
+//   - Sections render conditionally (Writing with no posts, Support while disabled), so
+//     entries whose target is absent are removed at runtime rather than listed here per
+//     condition. A control that scrolls nowhere is worse than a missing control.
+//   - Progressive enhancement: with JS off, both presentations remain working anchor
+//     lists. Only the active marker and the auto-centering are lost.
+// gotchas:
+//   - The mobile bar is sticky, so anchor targets would land underneath it. Sections
+//     carry scroll-margin-top to compensate; changing the bar height means changing
+//     that value too.
+//   - Active section is chosen by scroll position against a line near the top of the
+//     viewport, NOT an IntersectionObserver band. A mid-viewport band is unreachable
+//     both by a short section after an anchor click (which lands its top at y=0) and by
+//     the final section, which the document stops scrolling before it can reach.
+//   - The last section needs the explicit at-bottom case for that second reason.
+// last-touched: 2026-08-10
+// ---
+import site from '../data/site.json'
+
+// Sections gated by a flag are filtered out here, at build time — not left to the
+// runtime cleanup below. With JavaScript disabled the cleanup never runs, and an
+// emitted entry for a section that does not exist would be a dead link that scrolls
+// nowhere. The runtime pass stays as a backstop for the empty-collection case, which
+// this list cannot know about.
+const sections = [
+  { id: 'skills', label: 'Skills' },
+  { id: 'work', label: 'Work' },
+  { id: 'writing', label: 'Writing', when: site.writing.enabled },
+  { id: 'open-source', label: 'Repos' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'how-i-work', label: 'How I Work' },
+  { id: 'education', label: 'Education' },
+  { id: 'support', label: 'Support', when: site.support.enabled },
+].filter((s) => s.when !== false)
+---
+
+<!-- Wide screens: vertical timeline in the right gutter. -->
+<nav class="rail" aria-label="Page sections">
+  <ul>
+    {
+      sections.map((s) => (
+        <li>
+          <a href={`#${s.id}`} data-nav-link={s.id}>
+            <span class="dot" aria-hidden="true" />
+            <span class="label">{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<!-- Narrow screens: sticky chip bar with a scroll-progress line. -->
+<nav class="bar" aria-label="Page sections">
+  <div class="progress" aria-hidden="true"><span data-nav-progress></span></div>
+  <ul data-nav-track>
+    {
+      sections.map((s) => (
+        <li>
+          <a href={`#${s.id}`} data-nav-link={s.id}>
+            {s.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  // One id maps to several links — the rail entry and the chip both represent the same
+  // section, so they are marked together and removed together.
+  const links = new Map<string, HTMLElement[]>()
+  for (const el of document.querySelectorAll<HTMLElement>('[data-nav-link]')) {
+    const id = el.dataset.navLink!
+    links.set(id, [...(links.get(id) ?? []), el])
+  }
+
+  for (const [id, els] of links) {
+    if (!document.getElementById(id)) {
+      els.forEach((el) => el.closest('li')?.remove())
+      links.delete(id)
+    }
+  }
+
+  const track = document.querySelector<HTMLElement>('[data-nav-track]')
+  const progress = document.querySelector<HTMLElement>('[data-nav-progress]')
+  const targets = [...links.keys()]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null)
+
+  let active: string | null = null
+
+  function setActive(id: string) {
+    if (id === active) return
+    if (active) links.get(active)?.forEach((el) => el.removeAttribute('aria-current'))
+    links.get(id)?.forEach((el) => el.setAttribute('aria-current', 'true'))
+    active = id
+
+    // Keep the active chip visible without yanking the page: only the horizontal
+    // strip scrolls, never the document.
+    const chip = links.get(id)?.find((el) => el.closest('[data-nav-track]'))
+    if (chip && track) {
+      const want = chip.offsetLeft - track.clientWidth / 2 + chip.offsetWidth / 2
+      track.scrollTo({
+        left: Math.max(0, want),
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      })
+    }
+  }
+
+  const LINE = 0.35
+
+  function update() {
+    if (!targets.length) return
+
+    const doc = document.documentElement
+    const max = doc.scrollHeight - window.innerHeight
+    if (progress) progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`
+
+    // At the bottom of the document no further scrolling is possible, so the final
+    // section can never satisfy the line test on its own. It wins by position instead.
+    if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) {
+      setActive(targets[targets.length - 1].id)
+      return
+    }
+
+    const line = window.innerHeight * LINE
+    let current = targets[0]
+    for (const el of targets) {
+      if (el.getBoundingClientRect().top <= line) current = el
+      else break
+    }
+    setActive(current.id)
+  }
+
+  let queued = false
+  function schedule() {
+    if (queued) return
+    queued = true
+    requestAnimationFrame(() => {
+      queued = false
+      update()
+    })
+  }
+
+  addEventListener('scroll', schedule, { passive: true })
+  addEventListener('resize', schedule)
+  update()
+</script>
+
+<style>
+  /* ---- shared ---------------------------------------------------------- */
+  .rail a[aria-current],
+  .bar a[aria-current] {
+    color: var(--accent);
+  }
+
+  /* ---- wide: vertical rail --------------------------------------------- */
+  .rail {
+    position: fixed;
+    top: 50%;
+    right: 1.75rem;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .rail ul {
+    position: relative;
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .rail ul::before {
+    content: '';
+    position: absolute;
+    left: 3.5px;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    width: 1px;
+    background: var(--border-strong);
+  }
+
+  .rail a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  .dot {
+    position: relative;
+    z-index: 1;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+    transition: box-shadow 140ms ease, background 140ms ease;
+    flex: none;
+  }
+
+  .rail .label {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 140ms ease, transform 140ms ease;
+  }
+
+  .rail:hover .label,
+  .rail:focus-within .label,
+  .rail a[aria-current] .label {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rail a:hover .dot,
+  .rail a:focus-visible .dot {
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  .rail a:hover {
+    color: var(--text-muted);
+  }
+
+  .rail a[aria-current] .dot {
+    background: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent),
+      0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  /* ---- narrow: sticky chip bar ----------------------------------------- */
+  .bar {
+    display: none;
+  }
+
+  @media (max-width: 64rem) {
+    .rail {
+      display: none;
+    }
+
+    .bar {
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress {
+      height: 2px;
+      background: transparent;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+    }
+
+    .bar ul {
+      display: flex;
+      gap: 0.25rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0.35rem 0.75rem 0.4rem;
+      /* Rubber-band horizontally without the page ever scrolling sideways. */
+      overscroll-behavior-x: contain;
+    }
+
+    .bar ul::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bar a {
+      display: block;
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      /* 44px min touch target once padding and line-height are counted. */
+      line-height: 1.5;
+    }
+
+    .bar a[aria-current] {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot,
+    .rail .label {
+      transition: none;
+    }
+  }
+</style>

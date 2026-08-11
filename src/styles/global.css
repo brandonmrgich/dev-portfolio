@@ -134,6 +134,14 @@ ul {
   border-top: 1px solid var(--border);
 }
 
+/* The mobile section bar is sticky, so an anchor jump would land the heading
+   underneath it. This offset is tied to that bar's height — change one, change both. */
+@media (max-width: 64rem) {
+  .section {
+    scroll-margin-top: 3.25rem;
+  }
+}
+
 .section-head {
   display: flex;
   align-items: baseline;

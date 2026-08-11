@@ -23,6 +23,11 @@
     }
   ],
 
+  "writing": {
+    "enabled": false,
+    "note": "Disabled. Built, working, and deliberately switched off — planned, not abandoned. Turning it on takes two steps: set enabled true here, and rename src/pages/_writing/ to src/pages/writing/. The underscore keeps Astro from generating routes at all, so /writing/ genuinely 404s rather than existing as an empty unlinked page. The first post is written and waiting at src/content/writing/dead-keyboard-fna-winforms.md."
+  },
+
   "support": {
     "enabled": false,
     "blurb": "If something here saved you time — a patch, a write-up, a fix for a bug nobody else had documented — you can put a few dollars toward the next one.",

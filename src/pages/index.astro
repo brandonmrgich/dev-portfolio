@@ -14,7 +14,7 @@ import Featured from '../components/Featured.astro'
 import Repos from '../components/Repos.astro'
 import Experience from '../components/Experience.astro'
 import Credentials from '../components/Credentials.astro'
-import SectionRail from '../components/SectionRail.astro'
+import SectionNav from '../components/SectionNav.astro'
 import Principles from '../components/Principles.astro'
 import Writing from '../components/Writing.astro'
 import Support from '../components/Support.astro'
@@ -24,7 +24,7 @@ const title = `${resume.basics.name} — ${resume.basics.label}`
 ---
 
 <Base title={title} description={resume.basics.headline}>
-  <SectionRail />
+  <SectionNav />
   <Hero />
   <Skills />
   <Featured />
