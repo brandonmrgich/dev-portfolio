@@ -8,18 +8,45 @@
 //   cannot silently promote the wrong job into the hero.
 // last-touched: 2026-08-10
 // ---
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import resume from '../data/resume.json'
 
 const { basics } = resume
 const current = resume.work
   .filter((w) => !w.endDate)
   .sort((a, b) => b.startDate.localeCompare(a.startDate))[0]
+
+// scripts/fetch-avatar.mjs is allowed to fail without failing the build, so the photo
+// is genuinely optional. Checking the file rather than assuming it means a skipped
+// fetch renders a page with no photo instead of a broken image icon.
+//
+// Resolved from cwd, NOT from import.meta.url: Astro's SSR build rewrites components
+// into bundled chunks, so import.meta.url points at a generated path and every
+// relative lookup from it silently misses. Astro always builds from the project root.
+const hasAvatar = existsSync(join(process.cwd(), 'public/avatar.jpg'))
 ---
 
 <header class="hero">
   <div class="wrap">
-    <p class="mono kicker">{basics.location.city}, {basics.location.region}</p>
-    <h1>{basics.name}</h1>
+    <div class="identity">
+      {
+        hasAvatar && (
+          <img
+            class="avatar"
+            src="/avatar.jpg"
+            width="96"
+            height="96"
+            decoding="async"
+            alt={`${basics.name}, profile photo`}
+          />
+        )
+      }
+      <div>
+        <p class="mono kicker">{basics.location.city}, {basics.location.region}</p>
+        <h1>{basics.name}</h1>
+      </div>
+    </div>
 
     {
       current && (
@@ -51,8 +78,32 @@ const current = resume.work
     padding: 4.5rem 0 3.25rem;
   }
 
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    flex: none;
+    object-fit: cover;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-inset);
+  }
+
+  @media (max-width: 32rem) {
+    .avatar {
+      width: 68px;
+      height: 68px;
+    }
+  }
+
   .kicker {
-    margin: 0 0 0.85rem;
+    margin: 0 0 0.4rem;
     color: var(--text-faint);
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -62,7 +113,6 @@ const current = resume.work
     font-size: clamp(2.25rem, 6vw, 3.25rem);
     font-weight: 700;
     letter-spacing: -0.025em;
-    margin-bottom: 0.65rem;
   }
 
   .role {

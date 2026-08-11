@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Developer portfolio for dev.brandonmrgich.com — static Astro site built from resume.json + projects.json",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "dev": "node scripts/fetch-avatar.mjs && astro dev",
+    "start": "node scripts/fetch-avatar.mjs && astro dev",
+    "build": "node scripts/fetch-avatar.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "profile": "node scripts/build-profile.mjs",

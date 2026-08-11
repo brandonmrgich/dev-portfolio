@@ -2,6 +2,10 @@
 dist/
 .astro/
 
+# Fetched from the GitHub API on every build by scripts/fetch-avatar.mjs. Committing it
+# would let the site's photo drift from the profile it is supposed to mirror.
+public/avatar.jpg
+
 # dependencies
 node_modules/
 
