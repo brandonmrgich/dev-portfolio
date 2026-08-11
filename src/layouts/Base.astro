@@ -36,12 +36,9 @@ const personLd = {
   // No `email` field on purpose. The address stays in resume.json for JSON Resume
   // compatibility, but publishing it in JSON-LD would hand it straight to scrapers —
   // which is the same exposure that taking it out of the header was meant to avoid.
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: basics.location.city,
-    addressRegion: basics.location.region,
-    addressCountry: basics.location.countryCode,
-  },
+  //
+  // No `address` either: `basics.location` was removed from resume.json outright,
+  // so there is no home city to publish here. See `_locationNote` in that file.
   sameAs: basics.profiles.map((p) => p.url),
   knowsAbout: resume.skills.flatMap((s) => s.keywords),
   alumniOf: resume.education.map((e) => ({

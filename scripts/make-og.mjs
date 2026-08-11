@@ -71,11 +71,11 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   <rect x="0" y="0" width="10" height="${H}" fill="#4fd1c5"/>
 
-  <text x="86" y="176" font-family="Helvetica, Arial, sans-serif" font-size="26"
-        letter-spacing="4" fill="#6b7887">${esc(
-          `${basics.location.city.toUpperCase()}, ${basics.location.region.toUpperCase()}`,
-        )}</text>
-
+  <!-- No eyebrow above the name. It was the home city, which is no longer published
+       (see _locationNote in resume.json); the obvious replacement, the site host, is
+       already the footer line at y=556, and one fact twice on one card is worse than
+       the whitespace. The name keeps its original y so the layout below is untouched.
+       NOTE: this whole SVG is a JS template literal - no backticks in here. -->
   <text x="86" y="284" font-family="Helvetica, Arial, sans-serif" font-size="86"
         font-weight="bold" fill="#e4e9f0">${esc(basics.name)}</text>
 
