@@ -3,6 +3,7 @@
   "_meta": {
     "source": "Resume_2026_V3_Two_Page.pdf (pdfTeX, 2026-07-30)",
     "note": "Single source of truth for the site's Skills, Experience, Education and Awards sections. Edit here, not in the .astro templates. Phone number is deliberately omitted — it is on the PDF resume but should not be on a public web page.",
+    "publicWebCaveat": "The LCS bullets are deliberately softened relative to the PDF resume. Deployment topology — cluster counts, node counts, application and headcount figures — is removed, and the operator-facing description of the command and control system is generalized. Scope, ownership and measured impact are kept intact. A resume handed to a recruiter and a permanently-indexed public page are different distribution models; restore the specifics for the PDF, not for this site.",
     "lastSynced": "2026-08-10"
   },
   "basics": {
@@ -43,12 +44,12 @@
       "startDate": "2024-10",
       "endDate": null,
       "highlights": [
-        "Architected and implemented a configurable Java-based GUI platform and application framework that enables independent development, packaging, deployment, and runtime integration of mission applications within a unified operator environment; currently supports 12 applications used by 8–10 software engineers with adoption continuing to expand.",
+        "Architected and implemented a configurable Java-based GUI platform and application framework that enables independent development, packaging, deployment, and runtime integration of mission applications within a unified operator environment; now the foundation for a growing suite of applications built across the team.",
         "Defined framework APIs, application lifecycle standards, shared services, reusable widgets, and common design patterns that standardized development practices across our team and accelerated delivery of operator-facing applications.",
         "Designed and developed mission applications and backend services supporting real-time operational issue tracking, telemetry visualization, alarm monitoring, and system status awareness for operators.",
         "Led deployment architecture and automation efforts using Python, Bash, and Ansible, creating the first fully automated deployment solution for the GUI software stack after the system previously lacked a repeatable deployment process.",
-        "Developed a one-button deployment framework capable of provisioning, configuring, and deploying applications, libraries, service definitions, and environment-specific configurations across multiple development and operational Linux environments containing hundreds of nodes per cluster.",
-        "Executed dozens of deployments across at least eight clusters, enabling rapid software delivery while eliminating manual deployment activities and reducing configuration drift between environments.",
+        "Developed a one-button deployment framework capable of provisioning, configuring, and deploying applications, libraries, service definitions, and environment-specific configurations across multiple development and operational Linux environments.",
+        "Executed dozens of deployments at scale, eliminating manual deployment activity and reducing configuration drift between environments.",
         "Modernized legacy operator displays through collaboration with operators and human factors engineers, improving information presentation and enabling personnel to identify critical events and system state changes with substantially reduced latency and information overload.",
         "Established automated GUI testing infrastructure and expanded unit, integration, and functional testing capabilities through JUnit and Robot Framework, increasing validation coverage for safety-critical software releases.",
         "Performed JVM profiling and performance optimization using VisualVM and custom analysis techniques, identifying memory leaks and high-footprint applications while implementing lazy loading, deferred initialization, and paging strategies that reduced memory utilization by approximately 80%.",
@@ -73,7 +74,7 @@
       "startDate": "2023-05",
       "endDate": "2023-12",
       "highlights": [
-        "Contributed to a Class A, human-rated, safety-critical command and control system used by Master Console Operators to issue commands and monitor real-time telemetry.",
+        "Contributed to a Class A, human-rated, safety-critical command and control system supporting real-time launch operations.",
         "Designed and implemented automated black-box tests integrated into CI/CD pipelines, reducing end-to-end test execution time from days to hours and enabling faster validation cycles."
       ]
     },
