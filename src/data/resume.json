@@ -2,7 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   "_meta": {
     "source": "Resume_2026_V3_Two_Page.pdf (pdfTeX, 2026-07-30)",
-    "note": "Single source of truth for the site's Skills, Experience, Education and Awards sections. Edit here, not in the .astro templates. Phone number is deliberately omitted — it is on the PDF resume but should not be on a public web page.",
+    "note": "Single source of truth for the site's Skills, Experience, Education and Awards sections. Edit here, not in the .astro templates.",
+    "contactOmitted": "Phone and email are deliberately absent. This file lives in a public repository, so anything here is published whether or not a template renders it — taking the address out of the page while leaving it in the data would have been a half-measure. Reach-me links go through the profiles list instead. Both fields are optional in the JSON Resume schema, so the document stays valid without them.",
     "publicWebCaveat": "The LCS bullets are deliberately softened relative to the PDF resume. Deployment topology — cluster counts, node counts, application and headcount figures — is removed, and the operator-facing description of the command and control system is generalized. Scope, ownership and measured impact are kept intact. A resume handed to a recruiter and a permanently-indexed public page are different distribution models; restore the specifics for the PDF, not for this site.",
     "lastSynced": "2026-08-10"
   },
@@ -11,7 +12,6 @@
     "label": "Software Engineer",
     "headline": "Software engineer on human-rated launch control systems at NASA Kennedy Space Center — Java GUI platforms, deployment automation, and testing for safety-critical software. Off the clock, a production music catalog and streaming platform.",
     "_headlineNote": "Written for this site, not lifted from the resume PDF, which has no summary section. Every clause is sourced from the resume's Experience and Projects sections. This string is the page's meta description, its Open Graph description, and its JSON-LD description — it is the most-quoted sentence on the site, so change it deliberately.",
-    "email": "brandonamrgich@gmail.com",
     "location": {
       "city": "Jacksonville",
       "region": "FL",
