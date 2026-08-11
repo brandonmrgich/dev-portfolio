@@ -43,6 +43,20 @@
       ]
     },
     {
+      "name": "Unity Audio Engine",
+      "tagline": "Configuration-driven music and SFX engine for Unity 2D — playback behavior authored as data, not code.",
+      "visibility": "private",
+      "stack": ["C#", "Unity 6", "ScriptableObjects", "Logic Pro"],
+      "context": "Built to deliver my own score for Blackthornprod's Pass The Game Challenge — a jam where one game is handed between developers — then extracted from that game as a standalone engine. Three themes and dozens of SFX; the composing credit is on the music portfolio, this entry is the engine that plays it.",
+      "scale": "11 engine scripts · game-agnostic core · 3 example adapters",
+      "highlights": [
+        "Modeled playback as four kinds — beds with intensity-driven vertical layering, cues that take over the bed and hand it back, one-shot stingers on either a newest-takes-precedence Event bus or a freely-layered Ambience bus, and state-gated loops — each authored as a ScriptableObject, so scoring decisions are configuration rather than new code per cue.",
+        "Scheduled every stem through PlayScheduled so layers stay sample-locked to the bed as they come and go. Drift between stems is what makes vertical layering audibly fall apart, and it is not fixable after the fact by fading.",
+        "Kept the runtime deliberately dumb: mixing is baked in at bounce time, so the engine is a playback system rather than a mixing console. That constraint is what kept it small enough to lift out of the game intact.",
+        "Separated the game-agnostic core from the game-side drivers that feed it, so the engine never references a game concept. The jam's own intensity, movement, and surface adapters ship as reference examples instead of as part of the engine — which is what made the handoff to the next developer a clean one."
+      ]
+    },
+    {
       "name": "XNA-on-Apple-Silicon Keyboard Fix",
       "tagline": "Root-caused a dead-keyboard bug affecting a whole class of XNA-era Windows games running on FNA under Wine on Apple Silicon.",
       "visibility": "public",
