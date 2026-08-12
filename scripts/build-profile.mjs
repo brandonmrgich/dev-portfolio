@@ -54,7 +54,7 @@ push(basics.headline, '', `**Full portfolio → [dev.brandonmrgich.com](https://
 
 // --- selected work --------------------------------------------------------
 push('### What I build', '')
-for (const p of projects.featured) {
+for (const p of projects.featured.filter((p) => p.enabled !== false)) {
   const title = p.link ? `[${p.name}](${p.link.url})` : p.name
   const mark = p.visibility === 'private' ? ' *(private source)*' : ''
   push(`- **${title}**${mark} — ${p.tagline}`)
