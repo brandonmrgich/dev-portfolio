@@ -58,6 +58,8 @@
     },
     {
       "name": "XNA-on-Apple-Silicon Keyboard Fix",
+      "enabled": false,
+      "_note": "Disabled, not deleted. A featured entry renders only when `enabled` is not false (see the filters in src/components/Featured.astro and scripts/build-profile.mjs); the rest of the entry is kept intact so turning it back on is a one-line change. Its companion write-up (src/content/writing/dead-keyboard-fna-winforms.md) and the `tool` support CTA are already disabled alongside it.",
       "tagline": "Root-caused a dead-keyboard bug affecting a whole class of XNA-era Windows games running on FNA under Wine on Apple Silicon.",
       "visibility": "public",
       "link": {

@@ -8,9 +8,13 @@
 //     link reads as a deliberate choice rather than an oversight.
 //   - `link` is optional and, when present, points at a public artifact (a live site
 //     or a public org), not at the private repo.
-// last-touched: 2026-08-10
+//   - An entry with `enabled: false` is deliberately switched off and rendered
+//     nowhere; anything without the flag renders as before.
+// last-touched: 2026-08-12
 // ---
 import projects from '../data/projects.json'
+
+const featured = projects.featured.filter((p) => p.enabled !== false)
 ---
 
 <section class="section" id="work">
@@ -26,7 +30,7 @@ import projects from '../data/projects.json'
 
     <ol class="cards">
       {
-        projects.featured.map((p) => (
+        featured.map((p) => (
           <li class="card">
             <div class="card-head">
               <h3>
