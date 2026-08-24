@@ -7,9 +7,10 @@
 // invariants:
 //   - ONE source of truth for the active section. Both presentations are marked from
 //     the same update(); they can never disagree. Two independent spies would drift.
-//   - Sections render conditionally (Writing with no posts, Support while disabled), so
-//     entries whose target is absent are removed at runtime rather than listed here per
-//     condition. A control that scrolls nowhere is worse than a missing control.
+//   - Sections render conditionally (Writing with no posts, Support and How I Work
+//     while disabled), so entries whose target is absent are removed at runtime rather
+//     than listed here per condition. A control that scrolls nowhere is worse than a
+//     missing control.
 //   - Progressive enhancement: with JS off, both presentations remain working anchor
 //     lists. Only the active marker and the auto-centering are lost.
 // gotchas:
@@ -21,7 +22,7 @@
 //     both by a short section after an anchor click (which lands its top at y=0) and by
 //     the final section, which the document stops scrolling before it can reach.
 //   - The last section needs the explicit at-bottom case for that second reason.
-// last-touched: 2026-08-10
+// last-touched: 2026-08-24
 // ---
 import site from '../data/site.json'
 
@@ -36,7 +37,7 @@ const sections = [
   { id: 'writing', label: 'Writing', when: site.writing.enabled },
   { id: 'open-source', label: 'Repos' },
   { id: 'experience', label: 'Experience' },
-  { id: 'how-i-work', label: 'How I Work' },
+  { id: 'how-i-work', label: 'How I Work', when: site.principles.enabled },
   { id: 'education', label: 'Education' },
   { id: 'support', label: 'Support', when: site.support.enabled },
 ].filter((s) => s.when !== false)
