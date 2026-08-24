@@ -2,36 +2,45 @@
 // ---
 // label: Principles
 // role: "How I work" — the design doctrines applied on shape decisions.
-// invariants: Content lives in site.json. These are stated as working rules with a
-//   consequence, not as adjectives — "make state honest" is checkable, "detail-oriented"
-//   is not, and the difference is the entire value of the section.
-// last-touched: 2026-08-10
+// invariants:
+//   - Content lives in site.json. These are stated as working rules with a consequence,
+//     not as adjectives — "make state honest" is checkable, "detail-oriented" is not,
+//     and the difference is the entire value of the section.
+//   - Gated on site.principles.enabled. Renders NOTHING while that is false, and the
+//     SectionNav entry for #how-i-work is filtered on the same flag — a nav chip that
+//     scrolls to a section that does not exist is worse than no chip.
+// last-touched: 2026-08-24
 // ---
 import site from '../data/site.json'
+
+const { principles } = site
+const show = principles.enabled && principles.items.length > 0
 ---
 
-<section class="section" id="how-i-work">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>How I Work</h2>
-      <span class="rule"></span>
-    </div>
+{
+  show && (
+    <section class="section" id="how-i-work">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How I Work</h2>
+          <span class="rule" />
+        </div>
 
-    <ol class="principles">
-      {
-        site.principles.map((p, i) => (
-          <li>
-            <span class="num mono">{String(i + 1).padStart(2, '0')}</span>
-            <div>
-              <h3>{p.name}</h3>
-              <p>{p.body}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
-  </div>
-</section>
+        <ol class="principles">
+          {principles.items.map((p, i) => (
+            <li>
+              <span class="num mono">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{p.name}</h3>
+                <p>{p.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
 
 <style>
   .principles {
