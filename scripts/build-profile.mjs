@@ -19,6 +19,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { headline } from '../src/lib/format.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const read = (p) => JSON.parse(readFileSync(join(root, p), 'utf8'))
@@ -50,7 +51,7 @@ if (current) {
   push(`**${current.position}** · ${at}`, '')
 }
 
-push(basics.headline, '', `**Full portfolio → [dev.brandonmrgich.com](https://dev.brandonmrgich.com)**`, '')
+push(headline(basics), '', `**Full portfolio → [dev.brandonmrgich.com](https://dev.brandonmrgich.com)**`, '')
 
 // --- selected work --------------------------------------------------------
 push('### What I build', '')

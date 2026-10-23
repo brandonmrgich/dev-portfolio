@@ -11,6 +11,7 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import resume from '../data/resume.json'
+import { headline } from '../lib/format.js'
 
 const { basics } = resume
 const current = resume.work
@@ -56,7 +57,7 @@ const hasAvatar = existsSync(join(process.cwd(), 'public/avatar.jpg'))
       )
     }
 
-    <p class="headline">{basics.headline}</p>
+    <p class="headline">{headline(basics)}</p>
 
     <ul class="links">
       {
