@@ -12,6 +12,7 @@
 // ---
 import '../styles/global.css'
 import resume from '../data/resume.json'
+import { headline } from '../lib/format.js'
 
 interface Props {
   title: string
@@ -31,7 +32,7 @@ const personLd = {
   '@type': 'Person',
   name: basics.name,
   jobTitle: basics.label,
-  description: basics.headline,
+  description: headline(basics),
   url: canonical,
   // No `email` field on purpose. The address stays in resume.json for JSON Resume
   // compatibility, but publishing it in JSON-LD would hand it straight to scrapers —

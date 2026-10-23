@@ -5,12 +5,14 @@
     "note": "Single source of truth for the site's Skills, Experience, Education and Awards sections. Edit here, not in the .astro templates.",
     "contactOmitted": "Phone and email are deliberately absent. This file lives in a public repository, so anything here is published whether or not a template renders it — taking the address out of the page while leaving it in the data would have been a half-measure. Reach-me links go through the profiles list instead. Both fields are optional in the JSON Resume schema, so the document stays valid without them.",
     "publicWebCaveat": "The LCS bullets are deliberately softened relative to the PDF resume. Deployment topology — cluster counts, node counts, application and headcount figures — is removed, and the operator-facing description of the command and control system is generalized. Scope, ownership and measured impact are kept intact. A resume handed to a recruiter and a permanently-indexed public page are different distribution models; restore the specifics for the PDF, not for this site.",
-    "lastSynced": "2026-08-10"
+    "lastSynced": "2026-10-23"
   },
   "basics": {
     "name": "Brandon Mrgich",
     "label": "Software Engineer",
-    "headline": "Software engineer on human-rated launch control systems at NASA Kennedy Space Center — Java GUI platforms, deployment automation, and testing for safety-critical software. Off the clock, a production music catalog and streaming platform.",
+    "headline": "Software engineer at NASA Kennedy Space Center with {artemisYears} years on the Artemis program — spanning internships, the COMET contract, and civil service — building human-rated launch control systems: Java GUI platforms, deployment automation, and testing for safety-critical software. Off the clock, a production music catalog and streaming platform.",
+    "artemisStart": "2023-05",
+    "_artemisNote": "Start of NASA Artemis service (first internship). `{artemisYears}` in the headline is computed from this at build time by headline() in src/lib/format.js, so the figure never goes stale — the site rebuilds weekly and the profile README regenerates weekly.",
     "_headlineNote": "Written for this site, not lifted from the resume PDF, which has no summary section. Every clause is sourced from the resume's Experience and Projects sections. This string is the page's meta description, its Open Graph description, and its JSON-LD description — it is the most-quoted sentence on the site, so change it deliberately.",
     "_locationNote": "`basics.location` removed deliberately, not missing. Home city is not something this site needs to publish, and it fed four surfaces at once (hero kicker, OG card, JSON-LD PostalAddress, generated profile README). Employer locations on `work[].location` are unaffected — those are public facts about the job, not about where I live.",
     "profiles": [
@@ -33,12 +35,12 @@
   },
   "work": [
     {
-      "name": "Amentum",
+      "name": "NASA Kennedy Space Center",
       "position": "Launch Control Systems (LCS) Software Engineer",
-      "client": "NASA Kennedy Space Center",
       "location": "Cape Canaveral, FL",
-      "startDate": "2024-10",
+      "startDate": "2024-01",
       "endDate": null,
+      "note": "Artemis program. Launch Control Systems work spanning the COMET contract and NASA civil service — same team and mission throughout.",
       "highlights": [
         "Architected and implemented a configurable Java-based GUI platform and application framework that enables independent development, packaging, deployment, and runtime integration of mission applications within a unified operator environment; now the foundation for a growing suite of applications built across the team.",
         "Defined framework APIs, application lifecycle standards, shared services, reusable widgets, and common design patterns that standardized development practices across our team and accelerated delivery of operator-facing applications.",
@@ -54,21 +56,12 @@
       ]
     },
     {
-      "name": "Jacobs Space Operations Group",
-      "position": "Launch Control Systems (LCS) Software Engineer",
-      "client": "NASA Kennedy Space Center",
-      "location": "Cape Canaveral, FL",
-      "startDate": "2024-01",
-      "endDate": "2024-09",
-      "note": "Same Launch Control Systems role and program — the support contract transitioned to Amentum in October 2024.",
-      "highlights": []
-    },
-    {
-      "name": "National Aeronautics and Space Administration (NASA)",
+      "name": "NASA Kennedy Space Center",
       "position": "Spaceport Command and Control Software Development Intern",
       "location": "Cape Canaveral, FL",
       "startDate": "2023-05",
       "endDate": "2023-12",
+      "note": "Two internship terms on the Artemis program's Spaceport Command and Control System.",
       "highlights": [
         "Contributed to a Class A, human-rated, safety-critical command and control system supporting real-time launch operations.",
         "Designed and implemented automated black-box tests integrated into CI/CD pipelines, reducing end-to-end test execution time from days to hours and enabling faster validation cycles."

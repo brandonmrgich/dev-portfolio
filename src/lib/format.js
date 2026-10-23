@@ -27,3 +27,16 @@ export function range(startDate, endDate) {
 export function dateAttr(ym) {
   return ym || undefined
 }
+
+/** Years since "YYYY-MM", rounded to the nearest half: 41 months -> "3.5". */
+export function yearsSince(ym, now = new Date()) {
+  const d = new Date(`${ym}-01T00:00:00Z`)
+  const months =
+    (now.getUTCFullYear() - d.getUTCFullYear()) * 12 + (now.getUTCMonth() - d.getUTCMonth())
+  return String(Math.round(months / 6) / 2)
+}
+
+/** basics.headline with its `{artemisYears}` placeholder filled in. */
+export function headline(basics) {
+  return basics.headline.replace('{artemisYears}', yearsSince(basics.artemisStart))
+}

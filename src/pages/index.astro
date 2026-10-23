@@ -19,11 +19,12 @@ import Principles from '../components/Principles.astro'
 import Writing from '../components/Writing.astro'
 import SupportCTA from '../components/SupportCTA.astro'
 import resume from '../data/resume.json'
+import { headline } from '../lib/format.js'
 
 const title = `${resume.basics.name} — ${resume.basics.label}`
 ---
 
-<Base title={title} description={resume.basics.headline}>
+<Base title={title} description={headline(resume.basics)}>
   <SectionNav />
   <Hero />
   <Skills />
